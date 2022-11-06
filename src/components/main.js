@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import User from './users';
-import AddUser from './addUser';
+import Product from './products';
+import AddProduct from './addProduct';
 import Nav from './navigation';
 
 function Main() {
@@ -9,8 +9,8 @@ function Main() {
         <div>
             <Nav />
             <Routes>
-                <Route exact path='/' element={<AddUser />} />
-                <Route exact path='/users' element={<User />} />
+                <Route exact path='/add-product' element={<AddProduct />} />
+                <Route exact path='/' element={<Product />} />
             </Routes>
         </div>
     );
