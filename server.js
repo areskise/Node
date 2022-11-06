@@ -3,18 +3,11 @@ const cors = require('cors');
 
 const app = express();
 
-const users = [];
+const productRoutes = require('./routes/product');
 
 app.use(cors());
 app.use(express.json());
 
-app.get('/users', (req, res, next) => {
-    res.send(users);
-});
-
-app.post('/add-user', (req, res, next) => {
-    users.push({ username: req.body.username });
-    console.log("users:", users);
-});
+app.use(productRoutes);
 
 app.listen(5000);
