@@ -9,8 +9,9 @@ function Main() {
         <div>
             <Nav />
             <Routes>
-                <Route exact path='/add-product' element={<AddProduct />} />
                 <Route exact path='/' element={<Product />} />
+                <Route exact path='/products' element={<Product />} />
+                <Route exact path='/add-product' element={<AddProduct />} />
             </Routes>
         </div>
     );

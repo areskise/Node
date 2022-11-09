@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import AddToCart from './addToCart';
 
 function Product() {
     const [products, setProducts] = useState([]);
@@ -29,7 +30,8 @@ function Product() {
                                     <p class="product__description">{product.description}</p>
                                 </div>
                                 <div class="card__actions">
-                                    <button class="btn">Add to Cart</button>
+                                    <a href={`/products/${product.id}`} class="btn">Details</a>
+                                    < AddToCart product={product}/>
                                 </div>
                             </article>
                         );

@@ -40,9 +40,10 @@ main {
   padding: 0;
 }
 
-.main-header__item a {
+a {
   text-decoration: none;
   color: white;
+  padding: 1px 6px;
 }
 
 .main-header__item a:hover,
