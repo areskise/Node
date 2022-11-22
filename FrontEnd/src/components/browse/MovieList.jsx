@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from '../../utils/axios';
 import MovieDetail from '../../components/browse/MovieDetail';
+import requests from '../../utils/requests';
 import './MovieList.css';
 
 const base_url = 'https://image.tmdb.org/t/p/original';
@@ -9,6 +10,7 @@ function MovieList({ title, fetchUrl, isLargeRow }) {
 	const [movies, setMovies] = useState([]);
 	const [trailerUrl, setTrailerUrl] = useState('');
 	const [selectedMovie, setSelectedMovie] = useState(null);
+	const url = `${requests.fetchVideoMovies}`;
     
 	useEffect(() => {
 		async function fetchData() {
@@ -26,11 +28,14 @@ function MovieList({ title, fetchUrl, isLargeRow }) {
 		} else {
 			setSelectedMovie(movie);			
 			axios
-			.post("http://localhost:5000/api/movies/video", { id: movie.id })
+			.post(url + `&id=${movie.id}`)
 			.then((response) => {
 				  	setTrailerUrl(response.data.key);
 				})
-			.catch((error) => setTrailerUrl(''));
+			.catch((error) => {
+				console.log(error);
+			});
+			
 		}
 	
 	};

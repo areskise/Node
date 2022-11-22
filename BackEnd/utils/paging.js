@@ -32,7 +32,57 @@ const genrePaging = (movies, currentPage, genreId) => {
     return result;
 }
 
+const basicSearchPaging = (movies, currentPage, keyword) => {
+    const moviesBySearch = movies.filter(movie => {
+        let hasOverview, hasTitle;
+        if(movie.overview){
+            hasOverview = movie.overview.toLowerCase().includes(keyword.toLowerCase());
+        }
+        if(movie.title) {
+            hasTitle = movie.title.toLowerCase().includes(keyword.toLowerCase());
+        }
+        if ( hasOverview || hasTitle ) {
+            return movie;
+        }
+    });
+    const result = {
+        results: [], 
+        page: currentPage,
+        total_pages: Math.ceil(moviesBySearch.length / resultLimit)
+    };
+    const startIndex = (currentPage -1) * resultLimit;
+    const endIndex = (currentPage * resultLimit);
+    result.results = moviesBySearch.slice(startIndex, endIndex);
+    return result;
+}
+
+const advencedSearchPaging = (movies, currentPage, keyword, genre, mediaType, language, year) => {
+    const moviesBySearch = movies.filter(movie => {
+        let hasOverview, hasTitle;
+        if(movie.overview){
+            hasOverview = movie.overview.toLowerCase().includes(keyword.toLowerCase());
+        }
+        if(movie.title) {
+            hasTitle = movie.title.toLowerCase().includes(keyword.toLowerCase());
+        }
+        if ( hasOverview || hasTitle ) {
+            return movie;
+        }
+    });
+    const result = {
+        results: [], 
+        page: currentPage,
+        total_pages: Math.ceil(moviesBySearch.length / resultLimit)
+    };
+    const startIndex = (currentPage -1) * resultLimit;
+    const endIndex = (currentPage * resultLimit);
+    result.results = moviesBySearch.slice(startIndex, endIndex);
+    return result;
+}
+
 module.exports = { 
     Paging: Paging,
-    genrePaging: genrePaging
+    genrePaging: genrePaging,
+    basicSearchPaging: basicSearchPaging,
+    advencedSearchPaging: advencedSearchPaging
 }
