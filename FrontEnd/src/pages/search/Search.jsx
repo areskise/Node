@@ -105,7 +105,7 @@ const Search = () => {
 								</div>
 
 								<div className='input-select'>
-									<input type="number" name="years" min="1900" max="2023" step="1" placeholder="Year" value={searchYear} onChange={(e) => setSearchYear(e.target.value)} />
+									<input type="number" name="years" min="1900" max="2099" step="1" placeholder="Year" value={searchYear} onChange={(e) => setSearchYear(e.target.value)} />
 								</div>
 							</div>
 							<div className='button-search'>
