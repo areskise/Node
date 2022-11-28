@@ -17,4 +17,17 @@ module.exports = class Genre {
 	static fetchAll(cb) {
 		Genres.all(cb);
 	}
+
+	static findById(genreId, cb) {Genres.all(genres => {
+		const genre = genres.find(genre => genre.id === genreId);
+		cb(genre)
+		});
+	}
+
+	static findIdByName(genreName, cb) {Genres.all(genres => {
+		const genre = genres.find(genre => genre.name === genreName);
+		const genreId = genre.id
+		cb(genreId)
+		});
+	}
 }

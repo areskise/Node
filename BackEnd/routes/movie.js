@@ -12,6 +12,6 @@ router.get('/api/movies/discover', movieController.getMoviesByGenre);
 
 router.post('/api/movies/video', movieController.postVideoMovies);
 
-router.post('/api/movies/search', movieController.postSearchMovies);
+router.post('/api/movies/search', movieController.postMoviesBySearch);
 
 module.exports = router;
