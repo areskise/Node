@@ -14,6 +14,7 @@ const Search = () => {
 	const [searchYear, setSearchYear] = useState('');
 	const [genres, setGenres] = useState([]);
 	const [mediaTypes, setMediaTypes] = useState([]);
+	const [mess, setMess] = useState('');
 
 	useEffect(() => {
 		async function fetchGenres() {
@@ -30,9 +31,13 @@ const Search = () => {
 		fetchGenres();
 		fetchMediaTypes();
 	}, []);
-
 	const handleSearch = () => {
 		setQuery({keyword: searchInput, genre: searchGenre, mediaType: searchType, language: searchLanguage, year: searchYear});
+		if(searchInput==='') {
+			setMess("NO TYPE KEYWORDS")
+		} else {
+			setMess("NO MOVIES FOUND")
+		}
 	}
 
 	const resetSearch = () => {
@@ -135,7 +140,7 @@ const Search = () => {
 					</div>
 				</form>
 			</div>
-			<SearchResult query={query} searchInput={searchInput}/>
+			<SearchResult query={query} mess={mess} searchInput={searchInput}/>
 		</div>
 	);
 };

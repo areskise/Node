@@ -20,7 +20,6 @@ function MovieList({ title, fetchUrl, isLargeRow }) {
 		}
 		fetchData();
 	}, [fetchUrl]);
-
 	const handleClick = (movie) => {
 		if (selectedMovie && selectedMovie.id === movie.id) {
 			setSelectedMovie(null);
@@ -30,11 +29,12 @@ function MovieList({ title, fetchUrl, isLargeRow }) {
 			axios
 			.post(url + `&id=${movie.id}`)
 			.then((response) => {
-				  	setTrailerUrl(response.data.key);
-				})
+				setTrailerUrl(response.data.key);
+			})
 			.catch((error) => {
-				console.log(error);
+				setTrailerUrl('');	
 			});
+			console.log(movie);
 			
 		}
 	

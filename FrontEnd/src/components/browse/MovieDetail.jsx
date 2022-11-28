@@ -26,10 +26,10 @@ const MovieDetail = ({ movieTrailer, movieData }) => {
 				<p>{overview}</p>
 			</div>
 			<div className='movie_detail_trailer'>
-				<YouTube
+				{movieTrailer ? <YouTube
 					videoId={movieTrailer}
 					opts={opts}
-				/>
+				/> : <h2>No Movie Trailer Found</h2>}
 			</div>
 		</div>
 	);

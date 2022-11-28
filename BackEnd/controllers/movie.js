@@ -57,8 +57,14 @@ exports.postVideoMovies = (req, res, next) => {
         }
         else {
             Video.videoMovies(foundVideos, result => {
-                res.statusCode = 200;
-                res.send(result);
+                if(!result) {
+                    res.statusMessage = "Not found video";
+                    res.statusCode = 400;
+                    res.end();
+                } else {
+                    res.statusCode = 200;
+                    res.send(result);
+                }
             });
         }
     });

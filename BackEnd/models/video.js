@@ -35,13 +35,12 @@ module.exports = class Video {
 				}
 			}
 		});
-		if(suitableVideos.length > 1) {
+		if(suitableVideos.length >= 1) {
 			const lastPublished = new Date(Math.max(...suitableVideos.map(video => new Date(video.published_at)))).toISOString();
 			const result = suitableVideos.find(video => video.published_at === lastPublished)
 			cb(result)
 		} else {
-			const result = suitableVideos
-			cb(result)
+			cb()
 		}
 	};
 }
