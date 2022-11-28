@@ -10,11 +10,11 @@ const base_url = 'https://image.tmdb.org/t/p/original';
 const SearchResult = ({query}) => {
 	const [movies, setMovies] = useState([]);
 
-	const url = `${requests.fetchSearch}&query=${query}`;
+	const url = `${requests.fetchSearch}`;
 
 	useEffect(() => {
 		async function fetchData() {
-			const request = await axios.post(url);
+			const request = await axios.post(url, query);
 			setMovies(request.data.results);
 			return request;
 		}

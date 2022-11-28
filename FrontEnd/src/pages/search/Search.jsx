@@ -1,20 +1,47 @@
-import React, { useState } from 'react';
-
+import React, { useState, useEffect } from 'react';
+import axios from '../../utils/axios';
 import Nav from '../../components/browse/Nav';
 import SearchResult from '../../components/search/SearchResult';
+import requests from '../../utils/requests';
 import './Search.css';
 
 const Search = () => {
-	const [query, setQuery] = useState('');
+	const [query, setQuery] = useState({});
 	const [searchInput, setSearchInput] = useState('');
+	const [searchGenre, setSearchGenre] = useState('');
+	const [searchType, setSearchType] = useState('');
+	const [searchLanguage, setSearchLanguage] = useState('');
+	const [searchYear, setSearchYear] = useState('');
+	const [genres, setGenres] = useState([]);
+	const [mediaTypes, setMediaTypes] = useState([]);
+
+	useEffect(() => {
+		async function fetchGenres() {
+			const request = await axios.get(`${requests.fetchGenres}`);
+			setGenres(request.data);
+			return request;
+		}
+		async function fetchMediaTypes() {
+			const request = await axios.get(`${requests.fetchMediaTypes}`);
+			setMediaTypes(request.data);
+			return request;
+		}
+
+		fetchGenres();
+		fetchMediaTypes();
+	}, []);
 
 	const handleSearch = () => {
-		setQuery(searchInput);
+		setQuery({keyword: searchInput, genre: searchGenre, mediaType: searchType, language: searchLanguage, year: searchYear});
 	}
 
 	const resetSearch = () => {
 		setQuery('');
 		setSearchInput('');
+		setSearchGenre('');
+		setSearchType('');
+		setSearchLanguage('');
+		setSearchYear('');
 	}
 
 	return (
@@ -48,23 +75,59 @@ const Search = () => {
 						</div>
 						<div className='advance-search'>
 							<div className='row third'>
-								<div className='input-field'>
-									<div className='result-count'>
-										
-									</div>
-									<div className='group-btn'>
-										<button
-											className='btn-delete'
-											onClick={resetSearch}
-											type='button'
-										>
-											RESET
-										</button>
-										<button
-											className='btn-search'
-											type='button'
-											onClick={() => handleSearch()}
-										>SEARCH</button>
+								<div className='input-select'>
+									<select name="genres" id="genres" value={searchGenre} onChange={(e) => setSearchGenre(e.target.value)}>
+										<option hidden>Select Genre</option>
+										{genres.map(genre => {
+											return (
+												<option value={genre.name} key={genre.id}>{genre.name}</option>
+											);
+										})}
+									</select>
+								</div>
+								<div className='input-select'>
+									<select name="mediaTypes" id="mediaTypes" value={searchType}  onChange={(e) => setSearchType(e.target.value)}>
+										<option hidden>Select Type</option>
+										{mediaTypes.map(type => {
+											return (
+												<option value={type} key={mediaTypes.indexOf(type)}>{type}</option>
+											);
+										})}
+									</select>
+								</div>
+								<div className='input-select'>
+									<select name="languages" id="languages" value={searchLanguage} onChange={(e) => setSearchLanguage(e.target.value)}>
+										<option hidden>Select Language</option>
+										<option value="en">English</option>
+										<option value="ja">Japanese</option>
+										<option value="ko">Korean</option>
+									</select>
+								</div>
+
+								<div className='input-select'>
+									<input type="number" name="years" min="1900" max="2023" step="1" placeholder="Year" value={searchYear} onChange={(e) => setSearchYear(e.target.value)} />
+								</div>
+							</div>
+							<div className='button-search'>
+								<div className='row third'>
+									<div className='input-field'>
+										<div className='result-count'>
+											
+										</div>
+										<div className='group-btn'>
+											<button
+												className='btn-delete'
+												onClick={resetSearch}
+												type='button'
+											>
+												RESET
+											</button>
+											<button
+												className='btn-search'
+												type='button'
+												onClick={() => handleSearch()}
+											>SEARCH</button>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -72,7 +135,7 @@ const Search = () => {
 					</div>
 				</form>
 			</div>
-			<SearchResult query={query} />
+			<SearchResult query={query} searchInput={searchInput}/>
 		</div>
 	);
 };
