@@ -7,6 +7,7 @@ import {
 
 import Browse from './pages/browse/Browse';
 import Search from './pages/search/Search';
+import NotFound from './pages/notFound/NotFound';
 
 import './App.css';
 
@@ -17,6 +18,7 @@ function App() {
 		  <Routes>
 			<Route path="/" element={<Browse/>}/>
 			<Route path="/search" element={<Search/>}/>
+			<Route path="*" element={<NotFound />} />
 		  </Routes>
 		</BrowserRouter>
 	  );

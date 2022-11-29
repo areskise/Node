@@ -10,7 +10,7 @@ const userRoutes = require('./routes/user');
 const genreRoutes = require('./routes/genre');
 const mediaTypeRoutes = require('./routes/mediaType');
 const authorizedRoute = require("./middleware/authorized");
-const notFoundRoute = require("./middleware/notFoundRoute");
+const notFoundRoute = require("./middleware/notFound");
 
 app.use(cors());
 app.use(bodyParser.json());

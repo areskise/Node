@@ -32,10 +32,9 @@ function MovieList({ title, fetchUrl, isLargeRow }) {
 				setTrailerUrl(response.data.key);
 			})
 			.catch((error) => {
+				console.log(error);
 				setTrailerUrl('');	
-			});
-			console.log(movie);
-			
+			});			
 		}
 	
 	};
