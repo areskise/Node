@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const sequelize = require('./util/database');
 
 const app = express();
 
@@ -12,4 +13,6 @@ app.use(express.json());
 app.use(productRoutes);
 app.use(cartRoutes);
 
-app.listen(5000);
+sequelize.sync()
+    .then(results => app.listen(5000))
+    .catch(err => console.log(err));

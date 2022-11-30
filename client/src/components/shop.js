@@ -4,7 +4,7 @@ import AddToCart from './addToCart';
 function Shop() {
     const [products, setProducts] = useState([]);
     useEffect(() => { 
-        fetch("http://localhost:5000/")
+        fetch("http://localhost:5000/products")
             .then((response) => response.json())
             .then((data) => {
                 setProducts(data);
@@ -48,7 +48,7 @@ function Shop() {
 
     return(
         <div>
-            <h1>Products</h1>
+            <h1>Shop</h1>
             {productList()}
         </div>
     );
