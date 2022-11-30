@@ -5,11 +5,11 @@ function AdminProduct() {
 
     useEffect(() => {
         fetch('http://localhost:5000/products')
-        .then((response) => response.json())
-        .then((data) => {
-            setProducts(data);
-        })
-        .catch(err => console.log(err));
+            .then((response) => response.json())
+            .then((data) => {
+                setProducts(data);
+            })
+            .catch(err => console.log(err));
     }, []);
 
     const handleDelete = (productId) => {
@@ -18,8 +18,8 @@ function AdminProduct() {
             headers: {'Content-type': 'application/json'},
             credentials: 'same-origin'
         })
-        .then((response) => response.json())
-        .then((data) => console.log("data:", data));
+            .then((response) => response.json())
+            .then((data) => console.log("data:", data));
         
     }
 

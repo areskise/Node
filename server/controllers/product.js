@@ -22,7 +22,7 @@ exports.getProducts = (req, res, next) => {
 exports.deleteProduct = (req, res, next) => {
     const prodId = req.query.id;
     console.log(prodId);
-    Product.findAll({where: {id: prodId}})
+    Product.findAll({ where: {id: prodId} })
       .then(products => {
         return products[0].destroy();
       })
@@ -32,4 +32,21 @@ exports.deleteProduct = (req, res, next) => {
       res.end();
       })
       .catch(err => console.log(err));
-  }
+};
+
+exports.getEditProduct = (req, res, next) => {
+    const prodId = req.body.productId;
+    console.log(prodId);
+    Product.findAll({ where: { id: prodId } })
+        .then(products => {
+            res.send(products[0]);
+        })
+        .catch(err => console.log(err));
+};
+
+exports.postEditProduct = (req, res, next) => {
+    const postProduct = req.body;
+    Product.update({ ...postProduct }, { where: { id: postProduct.id } })
+        .catch(err => console.log(err));
+
+}
