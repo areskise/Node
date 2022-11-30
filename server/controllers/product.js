@@ -21,10 +21,9 @@ exports.getProducts = (req, res, next) => {
 
 exports.deleteProduct = (req, res, next) => {
     const prodId = req.query.id;
-    console.log(prodId);
-    Product.findAll({ where: {id: prodId} })
-      .then(products => {
-        return products[0].destroy();
+    Product.findByPk(prodId)
+      .then(product => {
+        return product.destroy();
       })
       .then(results => {
       res.statusCode = 200;
@@ -35,11 +34,11 @@ exports.deleteProduct = (req, res, next) => {
 };
 
 exports.getEditProduct = (req, res, next) => {
-    const prodId = req.body.productId;
-    console.log(prodId);
-    Product.findAll({ where: { id: prodId } })
-        .then(products => {
-            res.send(products[0]);
+    const prodId = req.params.productId;
+    console.log(req);
+    Product.findByPk(prodId)
+        .then(product => {
+            res.send(product);
         })
         .catch(err => console.log(err));
 };
