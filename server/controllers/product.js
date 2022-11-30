@@ -19,16 +19,14 @@ exports.getProducts = (req, res, next) => {
     .catch(err => console.log(err));
 };
 
-exports.deleteProduct = (req, res, next) => {
+exports.postDeleteProduct = (req, res, next) => {
     const prodId = req.query.id;
     Product.findByPk(prodId)
       .then(product => {
         return product.destroy();
       })
       .then(results => {
-      res.statusCode = 200;
-      res.setHeader("Content-Type", "application/json");
-      res.end();
+        console.log('DESTROYED PRODUCT');
       })
       .catch(err => console.log(err));
 };
@@ -46,6 +44,9 @@ exports.getEditProduct = (req, res, next) => {
 exports.postEditProduct = (req, res, next) => {
     const postProduct = req.body;
     Product.update({ ...postProduct }, { where: { id: postProduct.id } })
+        .then(result => {
+            console.log('UPDATED PRODUCT!');
+        })
         .catch(err => console.log(err));
 
 }
