@@ -6,13 +6,13 @@ exports.getCart = (req, res, next) => {
     req.user
         .getCart()
         .then(cart => {
-        return cart
-            .getProducts()
-            .then(products => {
-                res.send(products);
+            return cart
+                .getProducts()
+                .then(products => {
+                    res.send(products);
+                })
+                .catch(err => console.log(err));
             })
-            .catch(err => console.log(err));
-        })
         .catch(err => console.log(err));
 };
 
@@ -45,7 +45,7 @@ exports.postCart = (req, res, next) => {
         });
         })
         .then(() => {
-        res.json(req.body);
+            res.json(req.body);
         })
         .catch(err => console.log(err));
 };
@@ -61,7 +61,7 @@ exports.postCartDeleteProduct = (req, res, next) => {
         });
         })
         .then(result => {
-        res.send(result);
+            res.send(result);
         })
         .catch(err => console.log(err));
 };
@@ -70,7 +70,7 @@ exports.getOrders = (req, res, next) => {
     req.user
         .getOrders({ include: ['products'] })
         .then(orders => {
-        res.send(orders);
+            res.send(orders);
         })
         .catch(err => console.log(err));
 };

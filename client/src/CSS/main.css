@@ -75,6 +75,16 @@ a {
   margin: 0;
 }
 
+.card__detail {
+  display: flex;
+  justify-content: center;
+}
+
+.text__detail {
+  margin-left: 40px;
+  color: #4d4d4d;
+}
+
 .card__image {
   width: 100%;
 }

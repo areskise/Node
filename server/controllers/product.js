@@ -16,7 +16,7 @@ exports.getProducts = (req, res, next) => {
     req.user
         .getProducts()
         .then(products => {
-        res.send(products);
+            res.send(products);
         })
         .catch(err => console.log(err));
 };

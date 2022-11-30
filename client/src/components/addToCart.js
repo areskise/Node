@@ -1,10 +1,12 @@
 import React from "react";
 
 const onSubmit = (event, product) => {
-  console.log("product:", product);
+  const data = {
+    productId: product.id
+  }
   fetch("http://localhost:5000/cart", {
     method: "POST",
-    body: JSON.stringify(product),
+    body: JSON.stringify(data),
     headers: { "Content-Type": "application/json" },
     credentials: "same-origin",
   })
@@ -15,7 +17,7 @@ const onSubmit = (event, product) => {
 const AddToCart = (props) => {
   return (
     <div className="card__actions">
-      <form action="/cart" onSubmit={(event) => onSubmit(event, props.product)}>
+      <form  action='/cart' onSubmit={(event) => onSubmit(event, props.product)}>
         <button className="btn" type="submit">
           Add to Cart
         </button>

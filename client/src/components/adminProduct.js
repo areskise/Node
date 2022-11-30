@@ -44,9 +44,9 @@ function AdminProduct() {
                         </p>
                     </div>
                     <div className="card__actions">
-                        <button href="/" className="btn">Details</button>
-                        <a href={`/edit-product/${product.id}`} className="btn">Edit</a>
-                        <a href="/admin-products"type="submit" className="btn" onClick={() => handleDelete(product.id)}>Delete</a>
+                        <a href={`/detail/${product.id}`} className="btn">Details</a>
+                        <a href={`/admin/edit-product/${product.id}`} className="btn">Edit</a>
+                        <a href="/admin/products"type="submit" className="btn" onClick={() => handleDelete(product.id)}>Delete</a>
                     </div>
                 </div>
             ))
