@@ -22,9 +22,9 @@ exports.getProducts = (req, res, next) => {
 exports.deleteProduct = (req, res, next) => {
     const prodId = req.query.id;
     console.log(prodId);
-    Product.findByPk(prodId)
-      .then(product => {
-        return product.destroy();
+    Product.findAll({where: {id: prodId}})
+      .then(products => {
+        return products[0].destroy();
       })
       .then(results => {
       res.statusCode = 200;
