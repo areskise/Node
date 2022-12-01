@@ -17,22 +17,24 @@ function Orders() {
         if (orders.length > 0) {
             const listOrder = orders.map(order => {
                 return (
-                <div key={order._id}>
-                    <h1># {order._id}</h1>
+                <li key={order._id} className="orders__item">
+                    <h1>Order - # {order._id}</h1>
                     {order.products.map(product => {
                     return (
-                        <h2 key={product._id}>
-                        {product.title}({product.orderItem.quantity})
-                        </h2>
+                        <ul className="orders__products-item">
+                            <li key={product._id} className="orders__item">
+                            {product.product.title} ({product.quantity})
+                            </li>
+                        </ul>
                     );
                     })}
-                </div>
+                </li>
                 );
             });
 
             return (
-                <main className='centered'>
-                <div>{listOrder}</div>
+                <main>
+                <ul className="orders">{listOrder}</ul>
                 </main>
             );
         } else {

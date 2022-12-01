@@ -3,6 +3,7 @@ import './App.css';
 import './CSS/forms.css'
 import './CSS/main.css'
 import './CSS/cart.css'
+import './CSS/orders.css'
 import './CSS/product.css'
 import { BrowserRouter } from 'react-router-dom';
 
