@@ -15,7 +15,7 @@ main {
   margin: auto;
 }
 
-h1, h2 {
+h1, h2, p {
   margin: 30px;
 }
 
@@ -91,6 +91,7 @@ a {
 .text__detail {
   margin-left: 40px;
   color: #4d4d4d;
+  text-align: center;
 }
 
 .card__image {
