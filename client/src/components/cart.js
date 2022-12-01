@@ -41,10 +41,13 @@ const Cart = () => {
             return (
                 <li className="cart__item">
                     <h3>
-                        {item.title} ({item.quantity})
+                        {item.productId.title}
+                    </h3>
+                    <h3>
+                        (Quantity: {item.quantity})
                     </h3>
                     <form onSubmit={onDeleteItem}>
-                        <input type='hidden' name='productId' value={item._id} />
+                        <input type='hidden' name='productId' value={item.productId._id} />
                         <button className='btn' type='submit'>
                         Delete Item
                         </button>
