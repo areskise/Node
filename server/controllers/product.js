@@ -31,7 +31,7 @@ exports.getProduct = (req, res, next) => {
 
 exports.deleteProduct = (req, res, next) => {
     const prodId = req.query.id;
-    Product.deleteOne({_id: new ObjectId(prodId)})
+    Product.deleteById(prodId)
         .then(results => {
             console.log('DELETED PRODUCT');
         })
