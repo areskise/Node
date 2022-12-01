@@ -35,14 +35,14 @@ exports.getProduct = (req, res, next) => {
         .catch(err => console.log(err));
 };
 
-// exports.deleteProduct = (req, res, next) => {
-//     const prodId = req.query.id;
-//     Product.deleteById(prodId)
-//         .then(results => {
-//             console.log('DELETED PRODUCT');
-//         })
-//         .catch(err => console.log(err));
-// };
+exports.deleteProduct = (req, res, next) => {
+    const prodId = req.query.id;
+    Product.findByIdAndRemove(prodId)
+        .then(results => {
+            console.log('DELETED PRODUCT');
+        })
+        .catch(err => console.log(err));
+};
 
 exports.getEditProduct = (req, res, next) => {
     const prodId = req.params.productId;
