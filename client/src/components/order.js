@@ -16,11 +16,11 @@ function Orders() {
     if (orders.length > 0) {
         const listOrder = orders.map(order => {
             return (
-            <div key={order.id}>
-                <h1># {order.id}</h1>
+            <div key={order._id}>
+                <h1># {order._id}</h1>
                 {order.products.map(product => {
                 return (
-                    <h2 key={product.id}>
+                    <h2 key={product._id}>
                     {product.title}({product.orderItem.quantity})
                     </h2>
                 );

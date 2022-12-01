@@ -2,7 +2,7 @@ import React from "react";
 
 const onSubmit = (event, product) => {
   const data = {
-    productId: product.id
+    productId: product._id
   }
   fetch("http://localhost:5000/cart", {
     method: "POST",

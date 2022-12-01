@@ -31,7 +31,7 @@ function Product() {
                                 </div>
                                 <div className="card__actions">
                                     <div className="card__button">
-                                        <a href={`/detail/${product.id}`} className="btn">Details</a>
+                                        <a href={`/detail/${product._id}`} className="btn">Details</a>
                                     </div>
                                     <div className="card__button">
                                         < AddToCart product={product}/> 

@@ -8,6 +8,7 @@ function AdminProduct() {
             .then((response) => response.json())
             .then((data) => {
                 setProducts(data);
+                console.log(data);
             })
             .catch(err => console.log(err));
     }, []);
@@ -20,13 +21,13 @@ function AdminProduct() {
         })
             .then((response) => response.json())
             .then((data) => console.log("data:", data));
-        
+        console.log(productId);
     }
 
     return (
         <div className="grid">
             {products.map(product => (
-                <div className="card product-item" key={product.id}>
+                <div className="card product-item" key={product._id}>
                     <div className="card__header">
                         <h1 className="product__title">
                             { product.title }
@@ -44,9 +45,9 @@ function AdminProduct() {
                         </p>
                     </div>
                     <div className="card__actions">
-                        <a href={`/detail/${product.id}`} className="btn">Details</a>
-                        <a href={`/admin/edit-product/${product.id}`} className="btn">Edit</a>
-                        <a href="/admin/products"type="submit" className="btn" onClick={() => handleDelete(product.id)}>Delete</a>
+                        <a href={`/detail/${product._id}`} className="btn">Details</a>
+                        <a href={`/admin/edit-product/${product._id}`} className="btn">Edit</a>
+                        <a href="/admin/products"type="submit" className="btn" onClick={() => handleDelete(product._id)}>Delete</a>
                     </div>
                 </div>
             ))
