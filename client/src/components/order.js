@@ -13,34 +13,43 @@ function Orders() {
             .catch(err => console.log(err));
     }, []);
 
-    if (orders.length > 0) {
-        const listOrder = orders.map(order => {
-            return (
-            <div key={order._id}>
-                <h1># {order._id}</h1>
-                {order.products.map(product => {
+    const orderList = () => {
+        if (orders.length > 0) {
+            const listOrder = orders.map(order => {
                 return (
-                    <h2 key={product._id}>
-                    {product.title}({product.orderItem.quantity})
-                    </h2>
+                <div key={order._id}>
+                    <h1># {order._id}</h1>
+                    {order.products.map(product => {
+                    return (
+                        <h2 key={product._id}>
+                        {product.title}({product.orderItem.quantity})
+                        </h2>
+                    );
+                    })}
+                </div>
                 );
-                })}
-            </div>
-            );
-        });
+            });
 
-        return (
-            <main className='centered'>
-            <div>{listOrder}</div>
-            </main>
-        );
-    } else {
-        return (
-            <div>
-            <h2>Nothing there!</h2>
-            </div>
-        );
-    }
+            return (
+                <main className='centered'>
+                <div>{listOrder}</div>
+                </main>
+            );
+        } else {
+            return (
+                <div>
+                <h2>Nothing there!</h2>
+                </div>
+            );
+        }
+    };
+
+    return(
+        <div>
+            <h1>Orders</h1>
+            {orderList()}
+        </div>
+    );
 }
 
 export default Orders;

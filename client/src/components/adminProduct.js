@@ -23,35 +23,50 @@ function AdminProduct() {
             .then((data) => console.log("data:", data));
         console.log(productId);
     }
-
-    return (
-        <div className="grid">
-            {products.map(product => (
-                <div className="card product-item" key={product._id}>
-                    <div className="card__header">
-                        <h1 className="product__title">
-                            { product.title }
-                        </h1>
-                    </div>
-                    <div className="card__image">
-                        <img src={product.imageUrl} alt={product.title}/>
-                    </div>
-                    <div className="card__content">
-                        <h2 className="product__price">$
-                            { product.price }
-                        </h2>
-                        <p className="product__description">
-                            { product.description }
-                        </p>
-                    </div>
-                    <div className="card__actions">
-                        <a href={`/detail/${product._id}`} className="btn">Details</a>
-                        <a href={`/admin/edit-product/${product._id}`} className="btn">Edit</a>
-                        <a href="/admin/products"type="submit" className="btn" onClick={() => handleDelete(product._id)}>Delete</a>
-                    </div>
+    const productList = () => {
+        if(products.length > 0) {
+            return (
+                <div className="grid">
+                    {products.map(product => (
+                        <div className="card product-item" key={product._id}>
+                            <div className="card__header">
+                                <h1 className="product__title">
+                                    { product.title }
+                                </h1>
+                            </div>
+                            <div className="card__image">
+                                <img src={product.imageUrl} alt={product.title}/>
+                            </div>
+                            <div className="card__content">
+                                <h2 className="product__price">$
+                                    { product.price }
+                                </h2>
+                                <p className="product__description">
+                                    { product.description }
+                                </p>
+                            </div>
+                            <div className="card__actions">
+                                <a href={`/detail/${product._id}`} className="btn">Details</a>
+                                <a href={`/admin/edit-product/${product._id}`} className="btn">Edit</a>
+                                <a href="/admin/products"type="submit" className="btn" onClick={() => handleDelete(product._id)}>Delete</a>
+                            </div>
+                        </div>
+                    ))
+                    }
                 </div>
-            ))
-            }
+            );
+        }
+        else {
+            return(
+                <h2>No Products Found!</h2>
+            );
+        };
+    };
+
+    return(
+        <div>
+            <h1>Admin Products</h1>
+            {productList()}
         </div>
     );
 }

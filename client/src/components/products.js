@@ -46,7 +46,7 @@ function Product() {
         }
         else {
             return(
-                <h1>No Products Found!</h1>
+                <h2>No Products Found!</h2>
             );
         };
     };

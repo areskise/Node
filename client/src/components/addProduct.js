@@ -23,6 +23,7 @@ function AddProduct() {
 
     return(
         <div>
+            <h1>Add Product</h1>
             <form className="product-form" action="/" onSubmit={handleSubmit}>
                 <div className="form-control">
                     <label for="title">Title</label>
