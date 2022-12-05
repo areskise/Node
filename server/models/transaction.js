@@ -38,6 +38,11 @@ const transactionSchema = new Schema({
         required: true,
         default: 'Booked',
     },
+    createAt: {
+        type: Date,
+        required: true,
+        default: Date.now,
+    },
 });
 
 module.exports = mongoose.model('Transaction', transactionSchema);

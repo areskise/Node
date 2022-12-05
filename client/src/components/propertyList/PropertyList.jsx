@@ -1,6 +1,30 @@
 import "./propertyList.css";
+import React, { useEffect, useState } from 'react';
+import axios from "../../utils/axios";
 
 const PropertyList = () => {
+  const [hotels, setHotels] = useState([]);
+  const [apartments, setApartments] = useState([]);
+  const [resorts, setResorts] = useState([]);
+  const [villas, setVillas] = useState([]);
+  const [cabins, setCabins] = useState([]);
+
+  useEffect(() => {
+		async function fetchData() {
+			const hotels = await axios.get('/hotels/type?type=hotel');
+			setHotels(hotels.data);
+      const apartments = await axios.get('/hotels/type?type=apartment');
+			setApartments(apartments.data);
+      const resorts = await axios.get('/hotels/type?type=resort');
+			setResorts(resorts.data);
+      const villas = await axios.get('/hotels/type?type=villa');
+			setVillas(villas.data);
+      const cabins = await axios.get('/hotels/type?type=cabin');
+			setCabins(cabins.data);
+		}
+		fetchData();
+	}, []);
+
   return (
     <div className="pList">
       <div className="pListItem">
@@ -11,7 +35,7 @@ const PropertyList = () => {
         />
         <div className="pListTitles">
           <h1>Hotels</h1>
-          <h2>233 hotels</h2>
+          <h2>{hotels.length} hotels</h2>
         </div>
       </div>
       <div className="pListItem">
@@ -22,7 +46,7 @@ const PropertyList = () => {
         />
         <div className="pListTitles">
           <h1>Apartments</h1>
-          <h2>2331 hotels</h2>
+          <h2>{apartments.length} hotels</h2>
         </div>
       </div>
       <div className="pListItem">
@@ -33,7 +57,7 @@ const PropertyList = () => {
         />
         <div className="pListTitles">
           <h1>Resorts</h1>
-          <h2>2331 hotels</h2>
+          <h2>{resorts.length} hotels</h2>
         </div>
       </div>
       <div className="pListItem">
@@ -44,7 +68,7 @@ const PropertyList = () => {
         />
         <div className="pListTitles">
           <h1>Villas</h1>
-          <h2>2331 hotels</h2>
+          <h2>{villas.length} hotels</h2>
         </div>
       </div>
       <div className="pListItem">
@@ -55,7 +79,7 @@ const PropertyList = () => {
         />
         <div className="pListTitles">
           <h1>Cabins</h1>
-          <h2>2331 hotels</h2>
+          <h2>{cabins.length} hotels</h2>
         </div>
       </div>
     </div>

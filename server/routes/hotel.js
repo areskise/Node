@@ -4,14 +4,20 @@ const hotelController = require('../controllers/hotel');
 
 const router = express.Router();
 
-// router.get('/hotels', hotelController.getHotels);
+router.get('/hotels', hotelController.getHotels);
 
-// router.get('/hotels/:hotelId', hotelController.getHotel);
+router.get('/hotels/city', hotelController.getHotelsByCity);
 
-// router.post('/new-hotel', hotelController.postNewHotel);
+router.get('/hotels/type', hotelController.getHotelsByType);
 
-// router.delete('/delete-hotel', hotelController.deleteHotel);
+router.get('/hotels/Top3', hotelController.getHotelsByTop3);
 
-// router.put('/edit-hotel/:hotelId', hotelController.editHotel);
+router.get('/hotels/:hotelId', hotelController.getHotelById);
+
+router.post('/new-hotel', hotelController.postNewHotel);
+
+router.delete('/delete-hotel', hotelController.deleteHotel);
+
+router.put('/edit-hotel/:hotelId', hotelController.editHotel);
 
 module.exports = router;

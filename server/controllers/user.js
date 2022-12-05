@@ -19,16 +19,10 @@ exports.signUp = async (req, res, next) => {
         return res.status(404).json({ message: 'Username Already Exists!' });
     }
     else {
-        const newUser = new User({
-            username: req.body.username,
-            password: req.body.password,
-            fullName: req.body.fullName,
-            phoneNumber: req.body.phoneNumber,
-            email: req.body.email,
-        });
+        const newUser = new User(req.body);
         newUser.save()
             .then(results => {
-                console.log(results);
+                console.log('ADDED USER: ',results);
                 res.status(200).end();
             })
             .catch(err => console.log(err));
