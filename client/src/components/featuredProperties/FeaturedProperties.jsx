@@ -23,7 +23,7 @@ const FeaturedProperties = () => {
               alt={hotel.name}
               className="fpImg"
             />
-            <span className="fpName"><a href={`/hotels/${hotel._id}`}target="_blank">{hotel.name}</a></span>
+            <span className="fpName"><a href={`/hotels/${hotel._id}`}>{hotel.name}</a></span>
             <span className="fpCity">{hotel.city}</span>
             <span className="fpPrice">Starting from ${hotel.cheapestPrice}</span>
             <div className="fpRating">

@@ -2,9 +2,8 @@ import './login.css';
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import axios from "../../utils/axios";
-import Navbar from "../../components/navbar/Navbar";
 
-const Login = () => {
+const Login = ({setUser, setLogin}) => {
     const [username, setUsername] = useState(null);
     const [password, setPassword] = useState(null);
     const [error, setError] = useState(false);
@@ -17,8 +16,16 @@ const Login = () => {
             password: password
         };
         try {
-            await axios.post("/login", user);
-            navigate('/');
+            await axios.post("/login", user)
+            .then((res) => {
+				setLogin(true);
+                setUser(res.data)
+                navigate('/');
+			})
+			.catch((error) => {
+				console.log(error);	
+			});	
+            
         } catch (err) {
             setError(true);
         };
@@ -26,7 +33,6 @@ const Login = () => {
 
     return (
         <div>
-            <Navbar />
             <div className="main">
                 <div className="container">
                     <div className="item">

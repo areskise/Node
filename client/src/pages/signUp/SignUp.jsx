@@ -2,7 +2,6 @@ import './signUp.css';
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import axios from "../../utils/axios";
-import Navbar from "../../components/navbar/Navbar";
 
 const SignUp = () => {
     const [username, setUsername] = useState(null);
@@ -24,7 +23,7 @@ const SignUp = () => {
         };
         try {
             await axios.post("/sign-up", user);
-            navigate('/');
+            navigate('/login');
         } catch (err) {
             setError(true);
         };
@@ -32,7 +31,6 @@ const SignUp = () => {
 
     return (
         <div>
-            <Navbar />
             <div className="main">
                 <div className="container">
                     <div className="item">

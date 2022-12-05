@@ -2,6 +2,7 @@ const User = require('../models/user');
 
 exports.login = async (req, res, next) => {
     const user = await User.findOne({username: req.body.username})
+        
     if(!user) {
         return res.status(404).json({ message: 'Not Found User!' });
     }
@@ -11,6 +12,11 @@ exports.login = async (req, res, next) => {
     else {
         return res.status(200).send(user)
     }
+};
+
+exports.logout = (req, res, next) => {
+    req.user = null;
+    res.status(200).send(req.user)
 };
 
 exports.signUp = async (req, res, next) => {
