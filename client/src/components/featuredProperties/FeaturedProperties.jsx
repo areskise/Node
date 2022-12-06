@@ -19,7 +19,7 @@ const FeaturedProperties = () => {
         return (
           <div className="fpItem">
             <img
-              src={hotel.photos[Math.floor(Math.random()*hotel.photos.length)]}
+              src={hotel.photos[0]}
               alt={hotel.name}
               className="fpImg"
             />

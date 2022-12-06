@@ -1,10 +1,7 @@
-const User = require('../models/user');
 const Transaction = require('../models/transaction');
 
 exports.getUserTransactions = (req, res, next) => {
-    const userId = req.user.id;
-    const user = User.findById(userId);
-    Transaction.find({user: user.username})
+    Transaction.find({user: req.query.user})
         .then(transactions => {
             res.status(200).send(transactions)
         })
@@ -12,20 +9,14 @@ exports.getUserTransactions = (req, res, next) => {
 };
 
 exports.postTransactions = (req, res, next) => {
-    const userId = req.user.id;
-    const user = User.findById(userId);
-    const hotelId = req.params.hotelId;
-    const newTransaction = new Transaction({
-        ...red.body, 
-        user: user, 
-        hotel: hotelId,
-    });
+    console.log(req.body);
+    const newTransaction = new Transaction(req.body);
     newTransaction.save()
         .then(results => {
             console.log('ADDED TRANSACTION: ',results);
             res.status(200).end();
         })
-        .catch(err => console.log(err));
+        .catch(err => console.log('ADDED TRANSACTION ERROR: ',err));
 };
 
 exports.getAdminTransactions = (req, res, next) => {

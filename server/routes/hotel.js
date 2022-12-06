@@ -12,6 +12,8 @@ router.get('/hotels/type', hotelController.getHotelsByType);
 
 router.get('/hotels/Top3', hotelController.getHotelsByTop3);
 
+router.get('/hotels/search', hotelController.getHotelsBySearch);
+
 router.get('/hotels/:hotelId', hotelController.getHotelById);
 
 router.post('/new-hotel', hotelController.postNewHotel);

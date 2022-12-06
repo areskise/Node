@@ -1,17 +1,23 @@
 const User = require('../models/user');
 
 exports.login = async (req, res, next) => {
-    const user = await User.findOne({username: req.body.username})
+    await User.findOne({username: req.body.username})
+        .then(user => {
+            if(!user) {
+                return res.status(404).json({ message: 'Not Found User!' });
+            }
+            if(user.password !==  req.body.password) {
+                return res.status(401).json({ message: 'Password Incorrect!' });
+            }
+            else {
+                req.user = user;
+                next();
+                return res.status(200).send(req.user)
+            }
+          })
+          .catch(err => console.log(err))
         
-    if(!user) {
-        return res.status(404).json({ message: 'Not Found User!' });
-    }
-    if(user.password !==  req.body.password) {
-        return res.status(401).json({ message: 'Password Incorrect!' });
-    }
-    else {
-        return res.status(200).send(user)
-    }
+    
 };
 
 exports.logout = (req, res, next) => {

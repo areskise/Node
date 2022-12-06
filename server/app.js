@@ -12,10 +12,10 @@ const userRoutes = require('./routes/user');
 app.use(cors());
 app.use(express.json());
 
+app.use(userRoutes);
 app.use(hotelRoutes);
 app.use(roomRoutes);
 app.use(transactionRoutes);
-app.use(userRoutes);
 
 mongoose
     .connect('mongodb+srv://areskise:24110399@cluster0.vsce8sb.mongodb.net/booking?retryWrites=true&w=majority')

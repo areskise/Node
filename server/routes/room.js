@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.get('/rooms', roomController.getRooms);
 
-router.get('/rooms/:roomId', roomController.getRoom);
+router.get('/room', roomController.getRoom);
 
 router.post('/new-room', roomController.postNewRoom);
 

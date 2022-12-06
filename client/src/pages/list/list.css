@@ -1,3 +1,10 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px; 
+}
+
 .listContainer {
   display: flex;
   justify-content: center;
@@ -8,7 +15,7 @@
   width: 100%;
   max-width: 1024px;
   display: flex;
-  gap: 20px;
+  gap: 10px;
 }
 
 .listSearch {
@@ -32,6 +39,7 @@
   flex-direction: column;
   gap: 5px;
   margin-bottom: 10px;
+  width: 204px;
 }
 
 .lsItem>label{

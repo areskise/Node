@@ -1,17 +1,17 @@
 import "./navbar.css";
 import { Link } from 'react-router-dom';
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../../utils/axios";
 
-const Navbar = ({user, setUser, login, setLogin}) => {
+const Navbar = ({user, setUser}) => {
   const navigate = useNavigate();
 
   const logoutClick = async () => {
     try {
       await axios.post("/logout")
+      localStorage.removeItem("user")
       setUser(null)
-      setLogin(false)
       navigate('/');
     } catch (err) {
       console.log(err)
@@ -21,8 +21,8 @@ const Navbar = ({user, setUser, login, setLogin}) => {
   return (
     <div className="navbar">
       <div className="navContainer">
-        <span className="logo">Booking Website</span>
-        {!login && <div className="navItems">
+          <a href="/" className="logo">Booking Website</a>
+        {!user && <div className="navItems">
           <Link  to="/sign-up">
             <button  className="navButton">
               SignUp
@@ -34,7 +34,7 @@ const Navbar = ({user, setUser, login, setLogin}) => {
             </button>
           </Link>
         </div>}
-        {login && <div className="navItems">
+        {user && <div className="navItems">
           <span>{user.email}</span>
           <Link  to="/transactions">
             <button  className="navButton">

@@ -1,4 +1,5 @@
 const Hotel = require('../models/hotel');
+const Room = require('../models/room');
 
 exports.getHotels = (req, res, next) => {
     Hotel.find()
@@ -32,9 +33,41 @@ exports.getHotelsByTop3 = (req, res, next) => {
         .catch(err => console.log(err));
 };
 
+exports.getHotelsBySearch = async (req, res, next) => {
+    const numPeople = Math.floor(+req.query.options.adult + (+req.query.options.children/2));
+    const numRooms = +req.query.options.room;
+    const minPrice = +req.query.options.minPrice;
+    const maxPrice = +req.query.options.maxPrice;
+
+    const rooms = await Room.find({
+        maxPeople: {$gte: numPeople},
+    })
+    const roomIds = rooms.map(room => room._id.toString());
+    
+    Hotel.find({
+        city: {$regex: req.query.destination, $options: 'i'},
+        cheapestPrice: {$gte: minPrice || 0 , $lte: maxPrice || Infinity }
+    })
+        .then(hotels => {
+            const result = hotels.filter(hotel => {
+                const roomId = hotel.rooms.filter(room => {
+                    if(roomIds.includes(room)){
+                        return room
+                    }
+                })
+                if(roomId.length >= numRooms){
+                    return hotel
+                }
+            })
+            res.send(result)
+        })
+        .catch(err => console.log(err));
+};
+
 exports.getHotelById = (req, res, next) => {
     const hotelId = req.params.hotelId;
     Hotel.findById(hotelId)
+        .populate('rooms')
         .then(hotel => {
             res.send(hotel)
         })

@@ -13,19 +13,17 @@ import Transaction from "./pages/transaction/Transaction";
 import Navbar from "./components/navbar/Navbar";
 
 function App() {
-  const [login, setLogin] = useState(false);
-  const [user, setUser] = useState(null);
-
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
   return (
     <BrowserRouter>
-      <Navbar user={user} login={login} setLogin={setLogin} setUser={setUser}/>
+      <Navbar user={user} setUser={setUser}/>
       <Routes>
         <Route path="/" element={<Home/>}/>
-        <Route path="/login" element={<Login setUser={setUser} setLogin={setLogin}/>}/>
+        <Route path="/login" element={<Login setUser={setUser} />}/>
         <Route path="/sign-up" element={<SignUp/>}/>
-        <Route path="/transaction" element={<Transaction/>}/>
+        <Route path="/transactions" element={<Transaction user={user}/>}/>
         <Route path="/hotels" element={<List/>}/>
-        <Route path="/hotels/:id" element={<Hotel/>}/>
+        <Route path="/hotels/:hotelId" element={<Hotel user={user}/>}/>
       </Routes>
     </BrowserRouter>
   );

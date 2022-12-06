@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import axios from "../../utils/axios";
 
-const Login = ({setUser, setLogin}) => {
+const Login = ({setUser}) => {
     const [username, setUsername] = useState(null);
     const [password, setPassword] = useState(null);
     const [error, setError] = useState(false);
@@ -18,7 +18,7 @@ const Login = ({setUser, setLogin}) => {
         try {
             await axios.post("/login", user)
             .then((res) => {
-				setLogin(true);
+                localStorage.setItem("user", JSON.stringify(res.data))
                 setUser(res.data)
                 navigate('/');
 			})
@@ -30,7 +30,7 @@ const Login = ({setUser, setLogin}) => {
             setError(true);
         };
       };
-
+    
     return (
         <div>
             <div className="main">

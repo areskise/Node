@@ -13,9 +13,8 @@ const transactionSchema = new Schema({
         ref: 'Hotel',
     },
     room: {
-        type: [Schema.Types.ObjectId],
+        type: [Number],
         required: true,
-        ref: 'Room',
     },
     dateStart: {
         type: Date,
