@@ -10,22 +10,22 @@ li {
     margin: 10px 0px 10px 40px;
 }
 
-.hotel__container {
+.addRoom__container {
     display: flex;
     padding: 40px;
 }
 
-.hotel-side-bar {
+.addRoom-side-bar {
     flex: 1
 }
 
-.hotelInfo{
+.addRoomInfo{
     flex: 4;
     display: flex;
     flex-direction: column;
 }
 
-.hotelInfo__board {
+.addRoomInfo__board {
     margin: 20px auto;
     box-shadow: 5px 5px 15px lightgray;
     padding: 30px 20px 20px 20px;
@@ -34,7 +34,7 @@ li {
     align-items: center;
 }
 
-.hotelInfo__board-title {
+.addRoomInfo__board-title {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -43,11 +43,11 @@ li {
     height: 50px;
 }
 
-.hotelInfo__board-title>h4{
+.addRoomInfo__board-title>h2{
     float: left;
 }
 
-.hotelInfo__board-title>a {
+.addRoomInfo__board-title>a {
     background: none;
     border-radius: 3px;
     border: 1px solid green;
@@ -57,26 +57,26 @@ li {
     float: right;
 }
 
-.hotelInfo__board-table {
+.addRoomInfo__board-table {
     margin-bottom: 20px;
 }
 
-.hotelInfo__board-items{
+.addRoomInfo__board-items{
     display: flex;
     float: left;
     width: 100%;
 }
 
-.hotelInfo__board-item>h4{
+.addRoomInfo__board-item>h4{
     margin: 20px 0px 20px 20px;
 }
 
-.hotelInfo__board-item>p {
+.addRoomInfo__board-item>p {
     margin-left: 20px;
     font-size:x-large;
 }
 
-.hotelInfo__board-item>span {
+.addRoomInfo__board-item>span {
     float: right;
     margin-right: 20px;
     margin-bottom: 10px;
@@ -98,13 +98,13 @@ th>span {
     margin-right: 5px;
 }
 
+td>span {
+    margin-right: 30px;
+}
+
 td, th {
     padding: 15px;
     max-width: 424px;
-}
-
-.end {
-    text-align: right;
 }
 
 .paging__button {
@@ -127,7 +127,6 @@ td, th {
 
 .edit-button {
     background: none;
-    padding: 1px 6px;
     border-radius: 3px;
     border: 1px solid blue;
     border-style: dashed;

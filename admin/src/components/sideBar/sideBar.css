@@ -1,0 +1,43 @@
+/* .sidebar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+} */
+
+.center {
+    position: fixed;
+    left: 0;
+    height: 100%;
+    border-right: 1px solid #ccc;
+    padding-right: 98px;
+}
+
+.title {
+    margin-top: 20px;
+}
+
+a {
+    text-decoration: none;
+    color: #634efa;
+}
+
+a:visited {
+    color: #634efa;
+}
+
+
+li {
+    margin: 5px 0px 5px 0px;
+    display: flex;
+    align-items: center;
+    justify-items: center;
+}
+
+li:hover{
+    cursor: pointer;
+}
+
+ul {
+    display: flex;
+}

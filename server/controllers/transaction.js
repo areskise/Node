@@ -19,13 +19,22 @@ exports.postTransactions = (req, res, next) => {
         .catch(err => console.log('ADDED TRANSACTION ERROR: ',err));
 };
 
-exports.getAdminTransactions = (req, res, next) => {
-    const limit = 8;
-    const page = req.query.page
-    const skip = (page -1) * limit
+exports.getAdminTransactions = async (req, res, next) => {
+    const limit = req.query.limit;
+    const page = req.query.page ? req.query.page : 1
+    const skip = (page - 1) * limit
+
+    const count = await Transaction.find().then(transactions => {
+        return transactions.length
+    })
+
     Transaction.find().limit(limit).sort({createAt: 'desc'}).skip(skip)
+        .populate('hotel')
         .then(transactions => {
-            res.status(200).send(transactions)
+            res.json({
+                transactions: transactions,
+                count: count
+            });
         })
         .catch(err => console.log(err));
 };

@@ -1,9 +1,20 @@
 const Room = require('../models/room');
 
-exports.getRooms = (req, res, next) => {
-    Room.find()
+exports.getRooms = async (req, res, next) => {
+    const limit = req.query.limit;
+    const page = req.query.page ? req.query.page : 1
+    const skip = (page - 1) * limit
+    
+    const count = await Room.find().then(rooms => {
+        return rooms.length
+    })
+
+    Room.find().limit(limit).skip(skip)
         .then(rooms => {
-            res.send(rooms);
+            res.json({
+                rooms: rooms,
+                count: count
+            });
         })
         .catch(err => console.log(err));
 };

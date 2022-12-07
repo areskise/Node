@@ -1,33 +1,24 @@
+import React from 'react';
 import {faChevronLeft, faChevronRight} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React from 'react';
 import { useState, useEffect } from 'react';
 import axios from '../../utils/axios';
-import './hotels.css';
+import './users.css';
 
-const Hotels = () => {
-    const [hotels, setHotels] = useState([]);
+const Users = () => {
+    const [users, setUsers] = useState([]);
     const [page, setPage] = useState(1);
     const [totalPage, setTotalPage] = useState(1);
     const limit = 8;
-    
+
     useEffect(() => {
-            axios.get(`/hotels?limit=${limit}&page=${page}`)
+            axios.get(`/admin/users?limit=${limit}&page=${page}`)
                 .then(res => {
-                    setHotels(res.data.hotels)
+                    setUsers(res.data.users)
                     setTotalPage(Math.ceil(res.data.count/limit))
                 })
                 .catch(err => console.log(err));
     }, [limit, page]);
-
-    const handleDelete = (id) => {
-        axios.delete(`/hotels?id=${id}`)
-        .then(res => {
-            if (res.status === 400) {
-            return alert('Cannot Delete! There are transactions havenot checkout!');
-            }
-        }).catch(err => console.log(err));
-    }
 
     const nextPage = () => {
         if(page < totalPage) {
@@ -36,7 +27,7 @@ const Hotels = () => {
             setPage(1)
         }
     }
-
+    
     const prevPage = () => {
         if(page > 1) {
             setPage(page - 1)
@@ -47,37 +38,33 @@ const Hotels = () => {
 
     return (
         <div className="container">
-            <div className="hotel__container">
-                <div className='hotelInfo'>
-                    <div className="hotelInfo__board">
-                        <div className='hotelInfo__board-title'>
-                        <h2>Hotels List</h2>
-                        <a href="/addHotel">Add New</a>
+            <div className="user__container">
+                <div className='userInfo'>
+                    <div className="userInfo__board">
+                        <div className='userInfo__board-title'>
+                        <h2>Users List</h2>
                         </div>
-                        <div className="hotelInfo__board-table">
+                        <div className="userInfo__board-table">
                             <table>
                                 <thead>
                                     <tr>
                                         <th><input type="checkbox" /></th>
                                         <th><span></span>ID</th>
-                                        <th><span></span>Name</th>
-                                        <th><span></span>Type</th>
-                                        <th><span></span>Title</th>
-                                        <th><span></span>City</th>
-                                        <th><span></span>Action</th>
+                                        <th><span></span>Username</th>
+                                        <th><span></span>Full Name</th>
+                                        <th><span></span>Phone Number</th>
+                                        <th><span></span>Email</th>
                                         </tr>
                                 </thead>
                                 <tbody>
-                                    {hotels.map((hotel, i) => (
+                                    {users.map((user, i) => (
                                         <tr key={i}>
                                             <td><input type="checkbox" /></td>
-                                            <td>{hotel._id}</td>
-                                            <td>{hotel.name}</td>
-                                            <td>{hotel.type}</td>
-                                            <td>{hotel.title}</td>
-                                            <td>{hotel.city}</td>
-                                            <td><button className='delete-button' onClick={(e) => handleDelete(hotel._id)}>Delete</button></td>
-                                            <td><a href={`/editHotel/${hotel._id}`} className='edit-button' >Edit</a></td>
+                                            <td>{user._id}</td>
+                                            <td>{user.username}</td>
+                                            <td>{user.fullName}</td>
+                                            <td>{user.phoneNumber}</td>
+                                            <td>{user.email}</td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -88,9 +75,9 @@ const Hotels = () => {
                                         <td></td>
                                         <td></td>
                                         <td></td>
-                                        <td></td>
-                                        <td className="end">{page} of {totalPage}</td>
                                         <td>
+                                            {page} of {totalPage}
+                                            <span></span>
                                             <button className='paging__button' onClick={() => prevPage()}>
                                             <FontAwesomeIcon icon={faChevronLeft} />
                                             </button>
@@ -110,4 +97,4 @@ const Hotels = () => {
     )
 }
 
-export default Hotels
+export default Users

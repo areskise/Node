@@ -11,7 +11,7 @@ const Transaction = ({user}) => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/user-transactions?user=${user.username}`)
+      .get(`/user-transactions?user=${user.username}`)
       .then(res => setTrans(res.data))
       .catch(err => {
         console.log(err);
@@ -44,11 +44,8 @@ const Transaction = ({user}) => {
                 <tr className={i % 2 === 0 ? 'tableRow' : ''} key={tran._id}>
                   <td>{i + 1}</td>
                   <td>{tran.hotel}</td>
-                  <td>{tran.room.toString()}</td>
-                  <td>{`${format(
-                    new Date(tran.dateStart),
-                    'dd/MM/yyyy'
-                  )} - ${format(new Date(tran.dateEnd), 'dd/MM/yyyy')}`}</td>
+                  <td>{tran.room.join(', ')}</td>
+                  <td>{trans.dateStart.slice(0,10).split('-').reverse().join('/')} - {trans.dateEnd.slice(0,10).split('-').reverse().join('/')}</td>
                   <td>${tran.price}</td>
                   <td>{tran.payment}</td>
                   <td className={tran.status.toLowerCase()}>

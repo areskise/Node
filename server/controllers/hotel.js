@@ -1,10 +1,22 @@
 const Hotel = require('../models/hotel');
 const Room = require('../models/room');
+const Transaction = require('../models/transaction');
 
-exports.getHotels = (req, res, next) => {
-    Hotel.find()
+exports.getHotels = async (req, res, next) => {
+    const limit = req.query.limit;
+    const page = req.query.page ? req.query.page : 1
+    const skip = (page - 1) * limit
+
+    const count = await Hotel.find().then(hotels => {
+        return hotels.length
+    })
+
+    Hotel.find().limit(limit).skip(skip)
         .then(hotels => {
-            res.send(hotels);
+            res.json({
+                hotels: hotels,
+                count: count
+            });
         })
         .catch(err => console.log(err));
 };
@@ -86,6 +98,17 @@ exports.postNewHotel = (req, res, next) => {
 
 exports.deleteHotel = (req, res, next) => {
     const hotelId = req.params.hotelId;
+    Transaction.find({
+        hotel: hotelId,
+        status: {$ne: "Checkout"}
+    })
+        .then(trans => {
+            if(trans) {
+                res.status(400).send(JSON.stringify({message: 'Cannot Delete! There are transactions havenot checkout!'}))
+            }
+        })
+        .catch(err => console.log(err));
+
     Hotel.findByIdAndRemove(hotelId)
         .then(results => {
             console.log('DELETED HOTEL: ',results);
