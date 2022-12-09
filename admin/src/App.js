@@ -25,7 +25,7 @@ function App() {
       <Header/>
       <SideBar admin={admin} setAdmin={setAdmin}/>
       <Routes>
-        <Route path="/" element={<Login setAdmin={setAdmin}/>}/>
+        <Route path="/" element={<Login admin={admin} setAdmin={setAdmin}/>}/>
         <Route path="/dashBoard" element={<DashBoard/>}/>
         <Route path="/users" element={<Users/>}/>
         <Route path="/hotels" element={<Hotels/>}/>

@@ -14,6 +14,11 @@ const SignUp = () => {
     const navigate = useNavigate();
     
     const handleSignUp = async () => {
+        if(!username || !password || !fullName || !phoneNumber || !email) {
+            setError(true);
+        } else {
+            setError(false);
+        }
         const user = {
             username: username,
             password: password,
@@ -22,8 +27,14 @@ const SignUp = () => {
             email: email,
         };
         try {
-            await axios.post("/sign-up", user);
-            navigate('/login');
+            await axios.post("/sign-up", user)
+                .then((res) => {
+                    navigate('/login');
+                })
+                .catch((error) => {
+                    console.log(error);
+                    setError(true);	
+                });	
         } catch (err) {
             setError(true);
         };

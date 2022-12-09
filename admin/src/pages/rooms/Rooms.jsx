@@ -12,21 +12,29 @@ const Rooms = () => {
     const limit = 8;
 
     useEffect(() => {
+        axios.get(`/rooms?limit=${limit}&page=${page}`)
+            .then(res => {
+                setRooms(res.data.rooms)
+                setTotalPage(Math.ceil(res.data.count/limit))
+            })
+            .catch(err => console.log(err));
+    }, [limit, page]);
+
+    const handleDelete = (id) => {
+        axios.delete(`/delete-room?id=${id}`)
+        .then(res => {
+            console.log(res);
             axios.get(`/rooms?limit=${limit}&page=${page}`)
                 .then(res => {
                     setRooms(res.data.rooms)
                     setTotalPage(Math.ceil(res.data.count/limit))
                 })
                 .catch(err => console.log(err));
-    }, [limit, page]);
+        }).catch(err => alert('Cannot Delete! There are transactions havenot checkout!'));
+    }
 
-    const handleDelete = (id) => {
-        axios.delete(`/rooms?id=${id}`)
-        .then(res => {
-            if (res.status === 400) {
-            return alert('Cannot Delete! There are transactions havenot checkout!');
-            }
-        }).catch(err => console.log(err));
+    if(page > totalPage) {
+        setPage(page - 1)
     }
 
     const nextPage = () => {

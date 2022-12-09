@@ -30,9 +30,12 @@ const hotelSchema = new Schema({
         type: String,
         required: true,
     },
+    title: {
+        type: String,
+        required: true,
+    },
     rating: {
         type: Number,
-        required: true,
     },
     featured: {
         type: Boolean,

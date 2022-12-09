@@ -109,9 +109,13 @@ td, th {
 
 .paging__button {
     background: none;
-    color: black;
+    color: #333;
     border: none;
     cursor: pointer;
+}
+
+.paging__button:hover {
+    color: #000;
 }
 
 .delete-button {
@@ -129,9 +133,9 @@ td, th {
     background: none;
     padding: 1px 6px;
     border-radius: 3px;
-    border: 1px solid blue;
+    border: 1px solid #ff9900;
     border-style: dashed;
-    color: blue;
+    color: #ff9900;
     margin-right: 30px;
     font-size: 14px;
     cursor: pointer;

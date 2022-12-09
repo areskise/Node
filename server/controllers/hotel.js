@@ -2,6 +2,14 @@ const Hotel = require('../models/hotel');
 const Room = require('../models/room');
 const Transaction = require('../models/transaction');
 
+exports.getAllHotels = (req, res, next) => {
+    Hotel.find()
+        .then(hotels => {
+            res.send(hotels);
+        })
+        .catch(err => console.log(err));
+};
+
 exports.getHotels = async (req, res, next) => {
     const limit = req.query.limit;
     const page = req.query.page ? req.query.page : 1
@@ -86,43 +94,86 @@ exports.getHotelById = (req, res, next) => {
         .catch(err => console.log(err));
 };
 
-exports.postNewHotel = (req, res, next) => {
-    const newHotel = new Hotel(req.body)
-    newHotel.save()
-        .then(results => {
-            console.log('ADDED HOTEL: ',results);
-            res.status(200).end();
+exports.postAddHotel = (req, res, next) => {
+    const {name, city, type, desc, distance, title, featured, address, cheapestPrice} = req.body;
+    const rooms = req.body.rooms.split(',')
+    const photos = req.body.photos.split(',')
+    console.log(req.body);
+    Room.find({title: { $in: rooms}})
+        .then(rooms => {
+            const roomIds = rooms.map(room => room._id.toString());
+            const newHotel = new Hotel({
+                name: name,
+                city: city,
+                type: type,
+                desc: desc,
+                rooms: roomIds,
+                distance: distance,
+                photos: photos,
+                title: title,
+                featured: featured,
+                address: address,
+                cheapestPrice: cheapestPrice,
+            })
+            newHotel.save()
+                .then(results => {
+                    console.log('ADDED HOTEL: ',results);
+                    res.status(200).end();
+                })
+                .catch(err => console.log(err));
         })
         .catch(err => console.log(err));
 };
 
 exports.deleteHotel = (req, res, next) => {
-    const hotelId = req.params.hotelId;
+    const hotelId = req.query.id;
     Transaction.find({
         hotel: hotelId,
         status: {$ne: "Checkout"}
     })
         .then(trans => {
-            if(trans) {
-                res.status(400).send(JSON.stringify({message: 'Cannot Delete! There are transactions havenot checkout!'}))
+            if(trans[0]) {
+                res.status(400).json({message: 'Cannot Delete! There are transactions havenot checkout!'})
+            } else {
+                Hotel.findByIdAndRemove(hotelId)
+                    .then(results => {
+                        console.log('DELETED HOTEL: ',results);
+                        res.status(200).end();
+                    })
+                    .catch(err => console.log(err));
             }
         })
         .catch(err => console.log(err));
 
-    Hotel.findByIdAndRemove(hotelId)
-        .then(results => {
-            console.log('DELETED HOTEL: ',results);
-            res.status(200).end();
-        })
-        .catch(err => console.log(err));
+    
 };
 
 exports.editHotel = (req, res, next) => {
     const hotelId = req.params.hotelId;
-    Hotel.findByIdAndUpdate(hotelId, req.body, {new: true})
-        .then(results => {
-            console.log('UPDATED HOTEL: ',results);
-            res.status(200).end();
+    const {name, city, type, desc, rooms, distance, photos, title, featured, address, cheapestPrice} = req.body;
+    
+    Room.find({title: { $in: rooms}})
+        .then(rooms => {
+            const roomIds = rooms.map(room => room._id.toString());
+            const updatedHotel = {
+                name: name,
+                city: city,
+                type: type,
+                desc: desc,
+                rooms: roomIds,
+                distance: distance,
+                photos: photos,
+                title: title,
+                featured: featured,
+                address: address,
+                cheapestPrice: cheapestPrice,
+            }
+            Hotel.findByIdAndUpdate(hotelId, updatedHotel, {new: true})
+                .then(results => {
+                    console.log('UPDATED HOTEL: ',results);
+                    res.status(200).end();
+                })
+                .catch(err => console.log(err));
         })
         .catch(err => console.log(err));
 };

@@ -16,7 +16,7 @@ const Transactions = () => {
                 setTotalPage(Math.ceil(res.data.count/limit))
             })
             .catch(err => console.log(err));
-    },[]);
+    },[limit, page]);
     
     return (
         <div className="container">

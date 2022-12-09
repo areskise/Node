@@ -1,8 +1,7 @@
 import Header from '../../components/header/Header';
 import './transaction.css';
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { format } from 'date-fns';
+import axios from '../../utils/axios';
 import MailList from './../../components/mailList/MailList';
 import Footer from './../../components/footer/Footer';
 
@@ -16,8 +15,7 @@ const Transaction = ({user}) => {
       .catch(err => {
         console.log(err);
       });
-  }, []);
-    
+  }, [user.username]);
 
   return (
     <div>
@@ -45,7 +43,7 @@ const Transaction = ({user}) => {
                   <td>{i + 1}</td>
                   <td>{tran.hotel}</td>
                   <td>{tran.room.join(', ')}</td>
-                  <td>{trans.dateStart.slice(0,10).split('-').reverse().join('/')} - {trans.dateEnd.slice(0,10).split('-').reverse().join('/')}</td>
+                  <td>{tran.dateStart?.slice(0,10).split('-').reverse().join('/')} - {tran.dateEnd?.slice(0,10).split('-').reverse().join('/')}</td>
                   <td>${tran.price}</td>
                   <td>{tran.payment}</td>
                   <td className={tran.status.toLowerCase()}>

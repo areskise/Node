@@ -1,4 +1,7 @@
+const Hotel = require('../models/hotel');
+const { findById } = require('../models/room');
 const Room = require('../models/room');
+const Transaction = require('../models/transaction');
 
 exports.getRooms = async (req, res, next) => {
     const limit = req.query.limit;
@@ -19,7 +22,7 @@ exports.getRooms = async (req, res, next) => {
         .catch(err => console.log(err));
 };
 
-exports.getRoom = (req, res, next) => {
+exports.getRoomById = (req, res, next) => {
     const roomId = req.params.roomId;
     Room.findById(roomId)
         .then(room => {
@@ -28,29 +31,77 @@ exports.getRoom = (req, res, next) => {
         .catch(err => console.log(err));
 };
 
-exports.postNewRoom = (req, res, next) => {
-    const newRoom = new Room(req.body)
-    newRoom.save()
-    .then(results => {
-        console.log('ADDED ROOM: ',results);
-        res.status(200).end();
+exports.postAddRoom = (req, res, next) => {
+    const title = req.body.title;
+    const price = req.body.price;
+    const maxPeople = req.body.maxPeople;
+    const desc = req.body.desc;
+    const hotelId = req.body.hotelId;
+    const roomNumbers = req.body.roomNumbers.split(',');
+    
+    const newRoom = new Room({
+        title: title,
+        price: price,
+        maxPeople: maxPeople,
+        desc: desc,
+        roomNumbers: roomNumbers
     })
-    .catch(err => console.log(err));
+    newRoom.save()
+        .then(results => {
+            console.log(results._id.toString());
+            Hotel.findByIdAndUpdate(
+                hotelId,
+                { $push: { rooms: results._id.toString() } }
+            ).then(hotel => {
+                console.log('ADDED ROOM: ', results, 'and UPDATED ROOM HOTEL:', hotel)
+                res.status(200).end()
+            })
+        })
+        .catch(err => console.log(err));
 };
 
 exports.deleteRoom = (req, res, next) => {
-    const roomId = req.params.roomId;
-    Room.findByIdAndRemove(roomId)
-        .then(results => {
-            console.log('DELETED ROOM: ',results);
-            res.status(200).end();
-        })
+    const roomId = req.query.id;
+    
+    Transaction.find({
+        status: {$ne: "Checkout"}
+    })
+        .populate('hotel')
+        .then(trans => {
+            const roomIds = []
+            trans.forEach(tran => {
+                tran.hotel.rooms.forEach(id => roomIds.push(id))
+            });
+
+            Room.findById(roomId)
+            .then(room => {
+                if(roomIds.includes(roomId)) {
+                    res.status(400).json({message: 'Cannot Delete! There are transactions havenot checkout!'})
+                }  else {
+                    room.delete();
+                    console.log('DELETED ROOM: ',room);
+                    res.status(200).end();
+                }
+            })
+            .catch(err => console.log(err));
+            })
         .catch(err => console.log(err));
 };
 
 exports.editRoom = (req, res, next) => {
     const roomId = req.params.roomId;
-    Room.findByIdAndUpdate(roomId, req.body, {new: true})
+    const {title, price, maxPeople, desc} = req.body;
+    const roomNumbers = req.body.roomNumbers.map(roomNumber => +roomNumber)
+    
+    const updatedRoom = {
+        title: title,
+        price: price,
+        maxPeople: maxPeople,
+        desc: desc,
+        roomNumbers: roomNumbers
+    }
+
+    Room.findByIdAndUpdate(roomId, updatedRoom, {new: true})
         .then(results => {
             console.log('UPDATED ROOM: ',results);
             res.status(200).end();

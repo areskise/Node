@@ -41,6 +41,7 @@ li {
     background-color: #F5B9AC;
     color: #0E820A;
     border-radius: 5px;
+    font-weight: 500;
     text-transform: capitalize;
 }
 
@@ -94,7 +95,11 @@ th>span {
 
 .paging__button {
     background: none;
-    color: black;
+    color: #333;
     border: none;
     cursor: pointer;
+}
+
+.paging__button:hover {
+    color: #000;
 }

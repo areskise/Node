@@ -50,7 +50,6 @@ const Booking = ({ setOpen, hotelId, user, hotel }) => {
             price: price,
             payment: payment
         }
-        console.log(data);
         try {
             await axios.post('/transactions', data);
             navigate('/transactions');

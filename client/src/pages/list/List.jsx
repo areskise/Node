@@ -65,11 +65,13 @@ const List = () => {
                   "MM/dd/yyyy"
                 )} to ${format(date[0].endDate, "MM/dd/yyyy")}`}</span>
                 {openDate && (
-                  <DateRange
-                    onChange={(item) => setDate([item.selection])}
-                    minDate={new Date()}
-                    ranges={date}
-                  />
+                  <div> 
+                    <DateRange
+                      onChange={(item) => setDate([item.selection])}
+                      minDate={new Date()}
+                      ranges={date}
+                    />
+                  </div>
                 )}
               </div>
               <div className="lsItem">

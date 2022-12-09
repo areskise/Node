@@ -3,6 +3,7 @@
     padding: 20px;
     position: relative;
     display: flex;
+    min-width: 800px;
   }
   
   .rDates {

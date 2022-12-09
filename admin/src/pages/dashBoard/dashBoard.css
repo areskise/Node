@@ -65,7 +65,6 @@ li {
     margin-right: 20px;
     margin-bottom: 10px;
     padding: 5px 10px;
-    background-color: #F5B9AC;
     border-radius: 5px;
 }
 
@@ -75,6 +74,7 @@ li {
     color: #0E820A;
     border-radius: 5px;
     text-transform: capitalize;
+    font-weight: 500;
 }
 
 .dashboardInfo__board-title {
@@ -88,16 +88,6 @@ li {
 
 .dashboardInfo__board-title>h2{
     float: left;
-}
-
-.dashboardInfo__board-title>a {
-    background: none;
-    border-radius: 3px;
-    border: 1px solid green;
-    color: green;
-    padding: 7px;
-    cursor: pointer;
-    float: right;
 }
 
 .dashboardInfo__board-table {
@@ -127,7 +117,11 @@ th>span {
 
 .paging__button {
     background: none;
-    color: black;
+    color: #333;
     border: none;
     cursor: pointer;
+}
+
+.paging__button:hover {
+    color: #000;
 }
