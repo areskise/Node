@@ -10,9 +10,7 @@ exports.login = async (req, res, next) => {
                 return res.status(401).json({ message: 'Password Incorrect!' });
             }
             else {
-                req.user = user;
-                next();
-                return res.status(200).send(req.user)
+                return res.status(200).send(user)
             }
           })
           .catch(err => console.log(err))
@@ -33,9 +31,7 @@ exports.adminLogin = async (req, res, next) => {
                 return res.status(401).json({ message: 'Password Incorrect!' });
             }
             else {
-                req.user = user;
-                next();
-                return res.status(200).send(req.user)
+                return res.status(200).send(user)
             }
           })
           .catch(err => console.log(err))
