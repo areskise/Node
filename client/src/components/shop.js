@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import Cookies from 'universal-cookie';
 import AddToCart from './addToCart';
 
 function Shop() {
     const [products, setProducts] = useState([]);
+    const cookies = new Cookies();
+    const cookie = cookies.get('loggedIn');
+    const [loggedIn, setLoggedIn] = useState(cookie);
     useEffect(() => { 
         fetch("http://localhost:5000/products")
             .then((response) => response.json())
@@ -13,7 +17,6 @@ function Shop() {
 
     const productList = () => {
         if(products.length > 0) {
-            
             return(
                 <div className="grid">
                     { products.map((product) => {
@@ -29,9 +32,11 @@ function Shop() {
                                     <h2 className="product__price">${product.price}</h2>
                                     <p className="product__description">{product.description}</p>
                                 </div>
-                                <div className="card__actions">
-                                    < AddToCart product={product}/>
-                                </div>
+                                {loggedIn === 'true' &&
+                                    <div className="card__actions">
+                                        < AddToCart product={product}/>
+                                    </div>
+                                }
                             </article>
                         );
                     })}

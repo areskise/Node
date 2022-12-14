@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const EditProduct = () => {
   const params = useParams();
   const [product, setProduct] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch(`http://localhost:5000/edit-product/${params.productId}`)
@@ -15,6 +17,7 @@ const EditProduct = () => {
   }, [params.productId]);
 
   const onEditProduct = e => {
+    e.preventDefault();
     const target = e.target;
     const updateProduct = {
       id: params.productId,
@@ -29,15 +32,15 @@ const EditProduct = () => {
       body: JSON.stringify(updateProduct),
       headers: {'Content-type': 'application/json'},
       credentials: 'same-origin'
-    } )
-      .then((response) => response.json())
-      .then((data) => console.log("data:", data));
+    })
+      .then(res => navigate('/admin/products'))
+      .catch(err => console.log(err));
   };
 
   return (
-    <form className='product-form' action="/admin/products" onSubmit={onEditProduct}>
+    <form className='product-form' onSubmit={onEditProduct}>
       <div className='form-control'>
-        <label for='title'>Title</label>
+        <label htmlFor='title'>Title</label>
         <input
           type='text'
           name='title'
@@ -46,7 +49,7 @@ const EditProduct = () => {
         />
       </div>
       <div className='form-control'>
-        <label for='imageUrl'>Image URL</label>
+        <label htmlFor='imageUrl'>Image URL</label>
         <input
           type='text'
           name='imageUrl'
@@ -55,7 +58,7 @@ const EditProduct = () => {
         />
       </div>
       <div className='form-control'>
-        <label for='price'>Price</label>
+        <label htmlFor='price'>Price</label>
         <input
           type='number'
           name='price'
@@ -65,7 +68,7 @@ const EditProduct = () => {
         />
       </div>
       <div className='form-control'>
-        <label for='description'>Description</label>
+        <label htmlFor='description'>Description</label>
         <textarea
           name='description'
           id='description'

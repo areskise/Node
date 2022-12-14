@@ -43,6 +43,7 @@ exports.deleteProduct = (req, res, next) => {
     Product.findByIdAndRemove(prodId)
         .then(results => {
             console.log('DELETED PRODUCT');
+            res.send(result);
         })
         .catch(err => console.log(err));
 };
@@ -73,6 +74,7 @@ exports.postEditProduct = (req, res, next) => {
         })
         .then(result => {
             console.log('UPDATED PRODUCT!');
+            res.send(result);
         })
         .catch(err => console.log(err));
 }

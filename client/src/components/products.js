@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import Cookies from 'universal-cookie';
 import AddToCart from './addToCart';
 
 function Product() {
     const [products, setProducts] = useState([]);
+    const cookies = new Cookies();
+    const loggedIn = cookies.get('loggedIn');
+
     useEffect(() => { 
         fetch("http://localhost:5000/products")
             .then((response) => response.json())
@@ -33,9 +37,11 @@ function Product() {
                                     <div className="card__button">
                                         <a href={`/detail/${product._id}`} className="btn">Details</a>
                                     </div>
-                                    <div className="card__button">
-                                        < AddToCart product={product}/> 
-                                    </div>
+                                    {loggedIn === 'true' &&
+                                        <div className="card__button">
+                                            < AddToCart product={product}/> 
+                                        </div>
+                                    }
                                 </div>
                             </article>
                         );

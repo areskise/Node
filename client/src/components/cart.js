@@ -1,6 +1,8 @@
+import { useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 
 const Cart = () => {
+    const navigate = useNavigate();
     const [cart, setCart] = useState([]);
 
     useEffect(() => {
@@ -31,8 +33,8 @@ const Cart = () => {
             credentials: 'same-origin'
         }
     )
-        .then((response) => response.json())
-        .then((data) => console.log("data:", data));
+        .then((res) => navigate('/orders'))
+        .catch(err => console.log(err));
     };
 
     const cartList = () => {
@@ -62,7 +64,7 @@ const Cart = () => {
                 </ul>
                 <hr />
                 <div class="centered">
-                    <form action='/orders' type='submit' onSubmit={postOrder}>
+                    <form type='submit' onSubmit={postOrder}>
                         <button type='submit' className='btn'>
                             Order Now!
                         </button>

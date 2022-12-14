@@ -1,6 +1,8 @@
+import { useNavigate } from 'react-router-dom';
 import React from 'react';
 
 function AddProduct() {
+    const navigate = useNavigate();
 
     const handleSubmit = (event) => {
 
@@ -17,28 +19,28 @@ function AddProduct() {
             headers: {'Content-type': 'application/json'},
             credentials: 'same-origin'
         })
-        .then((response) => response.json())
-        .then((data) => console.log("data:", data));
+        .then(res => navigate('/'))
+        .catch(err => console.log(err));
     };
 
     return(
         <div>
             <h1>Add Product</h1>
-            <form className="product-form" action="/" onSubmit={handleSubmit}>
+            <form className="product-form" onSubmit={handleSubmit}>
                 <div className="form-control">
-                    <label for="title">Title</label>
+                    <label htmlFor="title">Title</label>
                     <input type="text" name="title" id="title" />
                 </div>
                 <div className="form-control">
-                    <label for="imageUrl">Image URL</label>
+                    <label htmlFor="imageUrl">Image URL</label>
                     <input type="text" name="imageUrl" id="imageUrl" defaultValue="https://www.publicdomainpictures.net/pictures/10000/velka/1-1210009435EGmE.jpg" />
                 </div>
                 <div className="form-control">
-                    <label for="price">Price</label>
-                    <input type="number" name="price" id="price" />
+                    <label htmlFor="price">Price</label>
+                    <input type="number" name="price" id="price" step="0.01"/>
                 </div>
                 <div className="form-control">
-                    <label for="description">Description</label>
+                    <label htmlFor="description">Description</label>
                     <textarea name="description" id="description" rows="4" />
                 </div>
                 <button className="btn" type="submit">Add Product</button>
