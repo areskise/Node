@@ -11,7 +11,8 @@ const flash = require('connect-flash');
 const errorController = require('./controllers/error');
 const User = require('./models/user');
 
-const MONGODB_URI = 'mongodb+srv://areskise:24110399@cluster0.vsce8sb.mongodb.net/shop';
+const MONGODB_URI =
+  'mongodb+srv://areskise:24110399@cluster0.vsce8sb.mongodb.net/shop';
 
 const app = express();
 const store = new MongoDBStore({
