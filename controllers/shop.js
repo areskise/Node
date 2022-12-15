@@ -177,7 +177,7 @@ exports.getInvoice = (req, res, next) => {
       pdfDoc.fontSize(26).text('Invoice', {
         underline: true
       });
-      pdfDoc.text('-----------------------');
+      pdfDoc.text('--------------------');
       let totalPrice = 0;
       order.products.forEach(prod => {
         totalPrice += prod.quantity * prod.product.price;
@@ -192,7 +192,7 @@ exports.getInvoice = (req, res, next) => {
               prod.product.price
           );
       });
-      pdfDoc.text('------');
+      pdfDoc.text('----------');
       pdfDoc.fontSize(20).text('Total Price: $' + totalPrice);
 
       pdfDoc.end();
