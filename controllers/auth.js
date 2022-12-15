@@ -153,12 +153,12 @@ exports.postSignup = (req, res, next) => {
     })
     .then(result => {
       res.redirect('/login');
-      transporter.sendMail({
-        to: email,
-        from: 'hieuthfx15451@funix.edu.vn',
-        subject: 'Signup succeeded!',
-        html: '<h1>You successfully signed up!</h1>'
-      });
+      // return transporter.sendMail({
+      //   to: email,
+      //   from: 'shop@node-complete.com',
+      //   subject: 'Signup succeeded!',
+      //   html: '<h1>You successfully signed up!</h1>'
+      // });
     })
     .catch(err => {
       const error = new Error(err);
@@ -209,7 +209,7 @@ exports.postReset = (req, res, next) => {
         res.redirect('/');
         transporter.sendMail({
           to: req.body.email,
-          from: 'hieuthfx15451@funix.edu.vn',
+          from: 'shop@node-complete.com',
           subject: 'Password reset',
           html: `
             <p>You requested a password reset</p>
