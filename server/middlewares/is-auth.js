@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
-exports.verifyToken = (req, res, next) => {
+const verifyToken = (req, res, next) => {
     const authHeader = req.get('Authorization');
     if(!authHeader) {
         return res.status(401).json('Not authenticated!');
@@ -25,22 +25,24 @@ exports.verifyToken = (req, res, next) => {
     });
 }
 
-exports.verifyCounselor = (req, res, next) => {
+const verifyCounselor = (req, res, next) => {
     verifyToken(req, res, () => {
         if(req.user.role === 'counselor' || req.user.role === 'admin') {
             next()
         } else {
-            return res.status(403).json('Not authenticated!');
+            return res.status(403).json('Counselor not authenticated!');
         }
     })
 } 
 
-exports.verifyAdmin = (req, res, next) => {
+const verifyAdmin = (req, res, next) => {
     verifyToken(req, res, () => {
         if(req.user.role === 'admin') {
             next()
         } else {
-            return res.status(403).json('Not authenticated!');
+            return res.status(403).json('Admin not authenticated!');
         }
     })
 } 
+
+module.exports = {verifyToken, verifyCounselor, verifyAdmin}

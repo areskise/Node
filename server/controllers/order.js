@@ -113,6 +113,32 @@ exports.getHistoryAPI = (req, res, next) => {
         })
 }
 
+exports.getAdminHistory = async (req, res, next) => {
+    const limit = req.query.limit;
+    const page = req.query.page ? req.query.page : 1
+    const skip = (page - 1) * limit
+
+    const count = await Order.find().then(orders => {
+        return orders.length
+    })
+
+    Order.find()
+        .limit(limit).sort({'created_at': -1}).skip(skip)
+        .then(orders => {
+            console.log(orders);
+            res.status(200).json({
+                orders: orders,
+                count: count
+            });
+        })
+        .catch(err => {
+            if (!err.statusCode) {
+                err.statusCode = 500;
+            }
+            next(err);
+        })
+}
+
 exports.getDetail = (req, res, next) => {
     const id = req.params.id
     Order.findById(id)

@@ -1,10 +1,9 @@
 import {
     faUser,
-    faHouse,
+    faCartPlus,
     faTruckFast,
-    faHouseMedical,
-    faDoorClosed,
-    faDoorOpen,
+    faMessage,
+    faCartShopping,
     faBox,
     faRightToBracket,
 } from "@fortawesome/free-solid-svg-icons";
@@ -13,17 +12,16 @@ import axios from "../../utils/axios";
 import { useNavigate } from 'react-router-dom';
 import './sideBar.css'
 
-const SideBar = ({admin, setAdmin}) => {
+const SideBar = ({login, setLogin, admin, counselor}) => {
     const navigate = useNavigate();
 
     const logoutClick = async () => {
       try {
-        await axios.post("/logout")
-        localStorage.removeItem("admin")
-        setAdmin(null)
+        await axios.post("/admin/logout")
+        setLogin(false)
         navigate('/');
       } catch (err) {
-        console.log(err)
+        console.log(err.response.data)
       }
     };
 
@@ -40,6 +38,13 @@ const SideBar = ({admin, setAdmin}) => {
                     <span> Dashboard</span>
                 </a>
                 </li>
+                <p className="title">CHAT</p>
+                <li>
+                <a href="/chat">
+                    <FontAwesomeIcon icon={faMessage} />
+                    <span> Chat</span>
+                </a>
+                </li>
                 <p className="title">LISTS</p>
                 <li>
                 <a href="/users">
@@ -48,37 +53,25 @@ const SideBar = ({admin, setAdmin}) => {
                 </a>
                 </li>
                 <li>
-                <a href="/hotels">
-                    <FontAwesomeIcon icon={faHouse} />
-                    <span> Hotels</span>  
+                <a href="/products">
+                    <FontAwesomeIcon icon={faCartShopping} />
+                    <span> Products</span>  
                 </a>
                 </li>
                 <li>
-                <a href="/rooms">
-                    <FontAwesomeIcon icon={faDoorClosed} />
-                    <span> Rooms</span>
-                </a>
-                </li>
-                <li>
-                <a href="/transactions">
+                <a href="/orders">
                     <FontAwesomeIcon icon={faTruckFast} />
-                    <span> Transaction</span>
+                    <span> Orders</span>
                 </a>
                 </li>
                 <p className="title">NEW</p>
                 <li>
-                <a href="/addHotel">
-                    <FontAwesomeIcon icon={faHouseMedical} />
-                    <span> New Hotel</span>
+                <a href="/addProduct">
+                    <FontAwesomeIcon icon={faCartPlus} />
+                    <span> New Product</span>
                 </a>
                 </li>
-                <li>
-                <a href="/addRoom">
-                    <FontAwesomeIcon icon={faDoorOpen} />
-                    <span> New Room</span>
-                </a>
-                </li>
-                <p className="title">USER</p>
+                <p className="title">ADMIN</p>
                 <li onClick={() => logoutClick()}>
                 <a href="/">
                     <FontAwesomeIcon icon={faRightToBracket} />
@@ -88,7 +81,27 @@ const SideBar = ({admin, setAdmin}) => {
             </div>
             </ul>
         }
-        {!admin &&
+        {counselor &&
+            <ul>
+            <div>
+                <p className="title">CHAT</p>
+                <li>
+                <a href="/chat">
+                    <FontAwesomeIcon icon={faMessage} />
+                    <span> Chat</span>
+                </a>
+                </li>
+                <p className="title">COUNSELOR</p>
+                <li onClick={() => logoutClick()}>
+                <a href="/">
+                    <FontAwesomeIcon icon={faRightToBracket} />
+                    <span> Logout</span>
+                </a>
+                </li>
+            </div>
+            </ul>
+        }
+        {!login &&
             <ul>
                 <div>
                     <p className="title"></p>

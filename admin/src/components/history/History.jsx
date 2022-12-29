@@ -1,7 +1,10 @@
 import {faChevronLeft, faChevronRight} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link } from 'react-router-dom';
+import convertMoney from '../../convertMoney';
+import './history.css';
 
-const Transaction = ({transactions, setPage, page, totalPage}) => {
+const History = ({orders, setPage, page, totalPage}) => {
 
     const nextPage = () => {
         if(page < totalPage) {
@@ -23,35 +26,32 @@ const Transaction = ({transactions, setPage, page, totalPage}) => {
         <table>
             <thead>
                 <tr>
-                    <th><input type="checkbox" /></th>
-                    <th><span></span>ID</th>
-                    <th><span></span>User</th>
-                    <th><span></span>Hotel</th>
-                    <th><span></span>Room</th>
-                    <th><span></span>Date</th>
-                    <th><span></span>Price</th>
-                    <th><span></span>Payment Method</th>
+                    <th><span></span>ID User</th>
+                    <th><span></span>Name</th>
+                    <th><span></span>Phone</th>
+                    <th><span></span>Address</th>
+                    <th><span></span>Total</th>
+                    <th><span></span>Delivery</th>
                     <th><span></span>Status</th>
+                    <th><span></span>Detail</th>
                     </tr>
             </thead>
             <tbody>
-                {transactions.map((trans, i) => (
+                {orders.map((order, i) => (
                     <tr key={i}>
-                        <td><input type="checkbox" /></td>
-                        <td>{trans._id}</td>
-                        <td>{trans.user}</td>
-                        <td>{trans.hotel.name}</td>
-                        <td>{trans.room.join(', ')}</td>
-                        <td>{trans.dateStart.slice(0,10).split('-').reverse().join('/')} - {trans.dateEnd.slice(0,10).split('-').reverse().join('/')}</td>
-                        <td>{trans.price}</td>
-                        <td>{trans.payment}</td>
-                        <td><span className="table__status">{trans.status}</span></td>
+                        <td>{order.user.userId}</td>
+                        <td>{order.user.fullName}</td>
+                        <td>{order.user.phone}</td>
+                        <td>{order.user.address}</td>
+                        <td>{convertMoney(order.total)} VNĐ</td>
+                        <td>Waiting for progressing</td>
+                        <td>Waiting for pay</td>
+                        <td><Link className="table__status" to={`/orders/${order._id}`}>View</Link></td>
                     </tr>
                 ))}
             </tbody>
             { page && <tfoot>
                 <tr>
-                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -74,4 +74,4 @@ const Transaction = ({transactions, setPage, page, totalPage}) => {
     );
 };
 
-export default Transaction;
+export default History;

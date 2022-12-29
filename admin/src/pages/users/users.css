@@ -124,7 +124,7 @@ td, th {
     border: 1px solid red;
     border-style: dashed;
     color: red;
-    margin-right: 30px;
+    margin-right: 10px;
     cursor: pointer;
     font-size: 14px;
 }
@@ -135,7 +135,7 @@ td, th {
     border: 1px solid #ff9900;
     border-style: dashed;
     color: #ff9900;
-    margin-right: 30px;
+    margin-right: 5px;
     font-size: 14px;
     cursor: pointer;
 }

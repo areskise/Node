@@ -36,11 +36,9 @@ app.use(chatRoomRoutes);
 app.use(messengerRoutes);
 
 app.use((error, req, res, next) => {
-  console.log(error);
   const status = error.statusCode || 500;
-  const message = error.message;
-  const data = error.data;
-  res.status(status).json({ message: message, data: data });
+  console.log(error);
+  res.status(status).json('Error! An error occurred. Please try again later');
 });
 
 mongoose

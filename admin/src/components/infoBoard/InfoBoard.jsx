@@ -1,40 +1,34 @@
 import './infoBoard.css';
 import {
     faUser,
-    faCartShopping,
+    faTruckFast,
     faSackDollar,
-    faWallet
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import convertMoney from '../../convertMoney';
 
-const Transaction = ({users, transactions}) => {
-
+const InfoBoard = ({users, orders, count}) => {
   return (
     <div className="dashboardInfo__board-items">
         <div className="dashboardInfo__board-item" id="users">
             <h4>Users</h4>
-            <p>{users.length}</p>
+            <p>{users.count}</p>
             <span><FontAwesomeIcon icon={faUser} /></span>
         </div>
         <div className="dashboardInfo__board-item" id="orders">
-            <h4>Transactions</h4>
-            <p>{transactions.length}</p>
-            <span><FontAwesomeIcon icon={faCartShopping} /></span>
+            <h4>Orders</h4>
+            <p>{count}</p>
+            <span><FontAwesomeIcon icon={faTruckFast} /></span>
         </div>
         <div className="dashboardInfo__board-item" id="earnings">
             <h4>Earnings</h4>
-            <p>${transactions.map(transaction => transaction.price).reduce((prev, curr) => prev + curr, 0)}</p>
+            <p>{convertMoney(orders.map(order => order.total).reduce((prev, curr) => prev + curr, 0))} VNĐ</p>
             <span>
                 <FontAwesomeIcon icon={faSackDollar} />
             </span>
-        </div>
-        <div className="dashboardInfo__board-item" id="balance">
-            <h4>Balance</h4>
-            <p>${transactions.map(transaction => transaction.price).reduce((prev, curr) => prev + curr, 0)}</p>
-            <span><FontAwesomeIcon icon={faWallet} /></span>
         </div>
     </div>
   );
 };
 
-export default Transaction;
+export default InfoBoard;

@@ -5,9 +5,9 @@ const { validateLogin, validateSignup } = require('../middlewares/validate');
 
 const router = express.Router();
 
-router.get('/users', controllers.getAllData);
+router.get('/users', controllers.getAllUser);
 
-router.get('/users/:id', controllers.getDetailData);
+router.get('/users/:id', controllers.getDetailUser);
 
 router.post('/users/signin', validateLogin, controllers.postSignIn);
 

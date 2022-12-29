@@ -10,22 +10,22 @@ li {
     margin: 10px 0px 10px 40px;
 }
 
-.room__container {
+.hotel__container {
     display: flex;
     padding: 40px;
 }
 
-.room-side-bar {
+.hotel-side-bar {
     flex: 1
 }
 
-.roomInfo{
+.hotelInfo{
     flex: 4;
     display: flex;
     flex-direction: column;
 }
 
-.roomInfo__board {
+.hotelInfo__board {
     margin: 20px auto;
     box-shadow: 5px 5px 15px lightgray;
     padding: 30px 20px 20px 20px;
@@ -34,7 +34,7 @@ li {
     align-items: center;
 }
 
-.roomInfo__board-title {
+.hotelInfo__board-title {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -43,11 +43,11 @@ li {
     height: 50px;
 }
 
-.roomInfo__board-title>h2{
+.hotelInfo__board-title>h4{
     float: left;
 }
 
-.roomInfo__board-title>a {
+.hotelInfo__board-title>a {
     background: none;
     border-radius: 3px;
     border: 1px solid green;
@@ -57,26 +57,26 @@ li {
     float: right;
 }
 
-.roomInfo__board-table {
+.hotelInfo__board-table {
     margin-bottom: 20px;
 }
 
-.roomInfo__board-items{
+.hotelInfo__board-items{
     display: flex;
     float: left;
     width: 100%;
 }
 
-.roomInfo__board-item>h4{
+.hotelInfo__board-item>h4{
     margin: 20px 0px 20px 20px;
 }
 
-.roomInfo__board-item>p {
+.hotelInfo__board-item>p {
     margin-left: 20px;
     font-size:x-large;
 }
 
-.roomInfo__board-item>span {
+.hotelInfo__board-item>span {
     float: right;
     margin-right: 20px;
     margin-bottom: 10px;
@@ -93,9 +93,18 @@ tbody>tr, thead>tr {
     border: 1px solid lightgray
 }
 
+th>span {
+    border-left: 1px solid lightgray;
+    margin-right: 5px;
+}
+
 td, th {
     padding: 15px;
     max-width: 424px;
+}
+
+.end {
+    text-align: right;
 }
 
 .paging__button {
@@ -109,29 +118,24 @@ td, th {
     color: #000;
 }
 
-th>span {
-    border-left: 1px solid lightgray;
-    margin-right: 5px;
-}
-
 .delete-button {
     background: none;
     border-radius: 3px;
     border: 1px solid red;
     border-style: dashed;
     color: red;
-    margin-right: 30px;
+    margin-right: 10px;
     cursor: pointer;
     font-size: 14px;
 }
 
 .edit-button {
     background: none;
+    padding: 1px 6px;
     border-radius: 3px;
     border: 1px solid #ff9900;
     border-style: dashed;
     color: #ff9900;
-    margin-right: 30px;
     font-size: 14px;
     cursor: pointer;
 }

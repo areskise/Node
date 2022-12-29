@@ -4,7 +4,6 @@ import queryString from 'query-string';
 import { Redirect } from 'react-router-dom';
 import Cookies from 'universal-cookie';
 import ChatRoomsAPI from '../../API/ChatRoomsAPI';
-import { useSelector } from 'react-redux';
 
 import io from 'socket.io-client';
 const socket = io('http://localhost:5000', { transports : ['websocket']});

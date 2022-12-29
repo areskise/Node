@@ -41,7 +41,7 @@ function Products(props) {
 										<img
 											className='img-fluid w-100'
 											src={value.img1}
-											alt='...'
+											alt={value.name}
 										/>
 									<div className='product-overlay'>
 										<ul className='mb-0 list-inline'></ul>

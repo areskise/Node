@@ -3,8 +3,8 @@ import React, { useState, useEffect } from 'react';
 import axios from '../../utils/axios';
 import { useNavigate } from 'react-router-dom';
 
-const Login = ({admin, setAdmin}) => {
-    const [username, setUsername] = useState(null);
+const Login = ({setLogin, admin, counselor}) => {
+    const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
     const [error, setError] = useState(false);
 
@@ -14,23 +14,31 @@ const Login = ({admin, setAdmin}) => {
         if(admin) {
             navigate('/dashboard')
         }
-    }, [admin, navigate]);
+        if(counselor) {
+            navigate('/chat')
+        }
+    }, [admin, counselor, navigate]);
 
     const handleLogin = () => {
         const user = {
-            username: username,
+            email: email,
             password: password,
         };
 
         axios.post("/admin/login", user)
         .then((res) => {
-            localStorage.setItem("admin", JSON.stringify(res.data))
-            setAdmin(res.data)
-            navigate('/dashboard');
+            if(res.data.role === 'admin') {
+                navigate('/dashboard');
+                setLogin(true)
+            }
+            if(res.data.role === 'counselor') {
+                navigate('/chat');
+                setLogin(true)
+            }
         })
-        .catch((error) => {
-            setError(true)
-            console.log(error);	
+        .catch(error => {
+            console.log(error.response.data);	
+            setError(error.response.data)
         });
     };
 
@@ -41,9 +49,9 @@ const Login = ({admin, setAdmin}) => {
             <div className='item'>
                 <input
                 type='text'
-                placeholder='Username'
-                id='username'
-                onChange={(e) => setUsername(e.target.value)}
+                placeholder='Email'
+                id='email'
+                onChange={(e) => setEmail(e.target.value)}
                 className='input'
                 />
             </div>
@@ -62,7 +70,7 @@ const Login = ({admin, setAdmin}) => {
                 </button>
             </div>
             <div className='item'>
-                {error && <span className="error">Wrong Credentials!</span>}
+                {error && <span className="error">{error}</span>}
             </div>
         </div>
     </div>

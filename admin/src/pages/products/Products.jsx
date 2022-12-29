@@ -1,37 +1,54 @@
 import {faChevronLeft, faChevronRight} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from '../../utils/axios';
-import './hotels.css';
+import alertify from 'alertifyjs';
+import convertMoney from '../../convertMoney';
+import './products.css';
 
-const Hotels = () => {
-    const [hotels, setHotels] = useState([]);
+const Products = ({admin}) => {
+    const [products, setProducts] = useState([]);
     const [page, setPage] = useState(1);
     const [totalPage, setTotalPage] = useState(1);
     const limit = 8;
     
+    const navigate = useNavigate();
+
     useEffect(() => {
-        axios.get(`/hotels?limit=${limit}&page=${page}`)
-            .then(res => {
-                setHotels(res.data.hotels)
-                setTotalPage(Math.ceil(res.data.count/limit))
-            })
-            .catch(err => console.log(err));
-    }, [limit, page]);
+        if(admin) {
+            axios.get(`/admin/products?limit=${limit}&page=${page}`)
+                .then(res => {
+                    setProducts(res.data.products)
+                    setTotalPage(Math.ceil(res.data.count/limit))
+                })
+                .catch(err => console.log(err));
+        } else {
+            navigate('/');
+        }
+    }, [admin, limit, page, navigate]);
 
     const handleDelete = (id) => {
-        axios.delete(`/delete-hotel?id=${id}`)
-            .then(res => {
-                console.log(res)
-                axios.get(`/hotels?limit=${limit}&page=${page}`)
-                    .then(res => {
-                        setHotels(res.data.hotels)
-                        setTotalPage(Math.ceil(res.data.count/limit))
-                    })
-                    .catch(err => console.log(err));
-            })
-            .catch(err => alert('Cannot Delete! There are transactions havenot checkout!'));  
+        const check = window.confirm('Are you sure delete this product?');
+        if(check) {
+            axios.delete(`/admin/delete?id=${id}`)
+                .then(res => {
+                    alertify.set('notifier', 'position', 'top-right');
+                    alertify.success(res.data);
+                    axios.get(`/admin/products?limit=${limit}&page=${page}`)
+                        .then(res => {
+                            setProducts(res.data.products)
+                            setTotalPage(Math.ceil(res.data.count/limit))
+                        })
+                        .catch(err => console.log(err));
+                })
+                .catch(err => {
+                    console.log(err.response.data);
+                    alertify.set('notifier', 'position', 'top-right');
+                    alertify.error(err.response.data);
+                });  
+        }
     }
 
     if(page > totalPage) {
@@ -60,39 +77,44 @@ const Hotels = () => {
                 <div className='hotelInfo'>
                     <div className="hotelInfo__board">
                         <div className='hotelInfo__board-title'>
-                        <h2>Hotels List</h2>
-                        <a href="/addHotel">Add New</a>
+                        <h2>Products List</h2>
+                        <a href="/addProduct">Add New</a>
                         </div>
                         <div className="hotelInfo__board-table">
                             <table>
                                 <thead>
                                     <tr>
-                                        <th><input type="checkbox" /></th>
                                         <th><span></span>ID</th>
                                         <th><span></span>Name</th>
-                                        <th><span></span>Type</th>
-                                        <th><span></span>Title</th>
-                                        <th><span></span>City</th>
-                                        <th><span></span>Action</th>
+                                        <th><span></span>Price</th>
+                                        <th><span></span>Image</th>
+                                        <th><span></span>Category</th>
+                                        <th><span></span>Edit</th>
                                         </tr>
                                 </thead>
                                 <tbody>
-                                    {hotels.map((hotel, i) => (
+                                    {products.map((product, i) => (
                                         <tr key={i}>
-                                            <td><input type="checkbox" /></td>
-                                            <td>{hotel._id}</td>
-                                            <td>{hotel.name}</td>
-                                            <td>{hotel.type}</td>
-                                            <td>{hotel.title}</td>
-                                            <td>{hotel.city}</td>
-                                            <td><button className='delete-button' onClick={(e) => handleDelete(hotel._id)}>Delete</button></td>
-                                            <td><a href={`/editHotel/${hotel._id}`} className='edit-button' >Edit</a></td>
+                                            <td>{product._id}</td>
+                                            <td>{product.name}</td>
+                                            <td>{convertMoney(product.price)} VNĐ</td>
+                                            <td>
+                                                <div className='media align-items-center justify-content-center'>
+													<img
+														src={product.img1}
+														alt='...'
+														width='200'
+													/>
+												</div>
+                                            </td>
+                                            <td>{product.category}</td>
+                                            <td><button className='delete-button' onClick={(e) => handleDelete(product._id)}>Delete</button></td>
+                                            <td><a href={`/editProduct/${product._id}`} className='edit-button' >Update</a></td>
                                         </tr>
                                     ))}
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
@@ -119,4 +141,4 @@ const Hotels = () => {
     )
 }
 
-export default Hotels
+export default Products

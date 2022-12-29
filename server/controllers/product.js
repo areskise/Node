@@ -3,7 +3,7 @@ const Product = require('../models/product')
 exports.getAPI = (req, res, next) => {
     Product.find()
         .then(products => {
-            res.json(products)
+            res.status(200).json(products)
         })
         .catch(err => {
             if (!err.statusCode) {
@@ -23,7 +23,7 @@ exports.getCategory = (req, res, next) => {
     })
         .limit(4)
         .then(products => {
-            res.json(products)
+            res.status(200).json(products)
         })
         .catch(err => {
             if (!err.statusCode) {
@@ -37,7 +37,7 @@ exports.getDetail = (req, res, next) => {
     const id = req.params.id
     Product.findById(id)
         .then(product => {
-            res.json(product)
+            res.status(200).json(product)
         })
         .catch(err => {
             if (!err.statusCode) {
@@ -57,7 +57,7 @@ exports.getPagination = (req, res, next) => {
         )
             .limit(count).skip(skip)
             .then(products => {
-                res.json(products)
+                res.status(200).json(products)
             })
             .catch(err => {
                 if (!err.statusCode) {
@@ -74,7 +74,7 @@ exports.getPagination = (req, res, next) => {
         })
             .limit(count).skip(skip)
             .then(products => {
-                res.json(products)
+                res.status(200).json(products)
             })
             .catch(err => {
                 if (!err.statusCode) {
@@ -83,4 +83,27 @@ exports.getPagination = (req, res, next) => {
                 next(err);
             })
     }
+}
+
+exports.adminProduct = async (req, res, next) => {
+    const {limit, page} = req.query;
+    const skip = (page - 1) * limit;
+
+    const count = await Product.find().then(products => {
+        return products.length
+    })
+        Product.find()
+            .limit(limit).skip(skip)
+            .then(products => {
+                res.status(200).json({
+                    products: products,
+                    count: count
+                })
+            })
+            .catch(err => {
+                if (!err.statusCode) {
+                    err.statusCode = 500;
+                }
+                next(err);
+            })
 }

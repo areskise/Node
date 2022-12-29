@@ -1,12 +1,12 @@
 import React from 'react';
 import {faChevronLeft, faChevronRight} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from '../../utils/axios';
-import './users.css';
+import './chat.css';
 
-const Users = ({admin}) => {
+const Users = ({login}) => {
     const [users, setUsers] = useState([]);
     const [page, setPage] = useState(1);
     const [totalPage, setTotalPage] = useState(1);
@@ -15,7 +15,7 @@ const Users = ({admin}) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if(admin) {
+        if(login) {
             axios.get(`/users?limit=${limit}&page=${page}`)
                 .then(res => {
                     setUsers(res.data.users)
@@ -25,7 +25,7 @@ const Users = ({admin}) => {
         } else {
             navigate('/');
         }
-    }, [admin, limit, page, navigate]);
+    }, [login, limit, page, navigate]);
 
     const nextPage = () => {
         if(page < totalPage) {

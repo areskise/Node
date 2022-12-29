@@ -21,11 +21,9 @@ exports.postSignIn = (req, res, next) => {
                 );
                 res.cookie('access_token', token, {
                     maxAge: 86400000,
-                    httpOnly: false,
                 })
                 res.cookie('user', user, {
                     maxAge: 86400000,
-                    httpOnly: false,
                 })
                 res.status(200).json('Logged in successfully');
             } else {
@@ -72,10 +70,30 @@ exports.postLogOut = (req, res, next) => {
     res.status(200).json('Logged out successfully')
 }
 
-exports.getAllData = (req, res, next) => {
+exports.getAllUser = async (req, res, next) => {
+    const limit = req.query.limit ? req.query.limit : 8;
+    const page = req.query.page ? req.query.page : 1
+    const skip = (page - 1) * limit
+    
+    const count = await User.find().then(users => {
+        return users.length
+    })
 
+    User.find().limit(limit).skip(skip)
+        .then(users => {
+            res.status(200).json({
+                users: users,
+                count: count
+            });
+        })
+        .catch(err => {
+            if (!err.statusCode) {
+                err.statusCode = 500;
+            }
+            next(err);
+        })
 }
 
-exports.getDetailData = (req, res, next) => {
+exports.getDetailUser = (req, res, next) => {
 
 }
