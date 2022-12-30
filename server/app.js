@@ -47,7 +47,7 @@ mongoose
     const server = app.listen(process.env.PORT || 5000);
     const io = require('./socket').init(server);
     io.on('connection', socket => {
-      console.log('Connected');
+      console.log('Connected socket: ' + socket.id);
     });
   })
   .catch(err => console.log(err));

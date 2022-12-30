@@ -11,6 +11,11 @@ const ChatRoomsAPI = {
 		return axiosClient.post(url);
 	},
 
+	endRoom: (body) => {
+		const url = `/chatrooms/endRoom`;
+		return axiosClient.post(url, body);
+	},
+
 	addMessage: (body) => {
 		const url = `/chatrooms/addMessage`;
 		return axiosClient.put(url, body);

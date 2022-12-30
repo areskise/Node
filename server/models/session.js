@@ -6,6 +6,17 @@ const sessionSchema = new Schema ({
         type: Schema.Types.ObjectId,
         required: true,
         ref: 'User'
+    },
+    messages: [
+        { 
+            message: String,
+            is_admin: Boolean 
+        }
+    ],
+    created_at: { 
+        type: Date, 
+        required: true, 
+        default: Date.now 
     }
 })
 

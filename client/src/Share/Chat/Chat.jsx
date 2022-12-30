@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import './Chat.css';
-import queryString from 'query-string';
-import { Redirect } from 'react-router-dom';
 import Cookies from 'universal-cookie';
 import ChatRoomsAPI from '../../API/ChatRoomsAPI';
 
@@ -13,9 +11,10 @@ function Chat(props) {
 	const user = cookies.get('user');
 	const [activeChat, setActiveChat] = useState(false);
 	const [textMessage, setTextMessage] = useState('');
-	const [message, setMessage] = useState();
-	const [roomId, setRoomId] = useState('');
+	const [message, setMessage] = useState([]);
+	const roomId = cookies.get('roomId');
 
+	const [load, setLoad] = useState(false);
 
 	// Hàm này dùng để mở hộp thoại chat
 	const onChat = () => {
@@ -26,23 +25,30 @@ function Chat(props) {
 		}
 	};
 
+	const endChat = async () => {
+		if(roomId) {
+			await ChatRoomsAPI.endRoom({roomId: roomId});
+
+			setTextMessage('');
+			setMessage([]);
+			setActiveChat(false);
+
+			return;
+		}
+	};
+
 	const onChangeText = (e) => {
 		setTextMessage(e.target.value);
 	};
 
-	const handlerSend = async () => {
+	const handlerSend = () => {
 		//Sau đó nó emit dữ liệu lên server bằng socket với key send_message và value data
 		
 		// Check if text equal "/end" then end room
 		if(roomId && textMessage.toLowerCase() === '/end') {
-			await ChatRoomsAPI.addMessage({
-				message: "==END ROOM==",
-				roomId: roomId,
-				is_admin: false,
-			});
+			ChatRoomsAPI.endRoom({roomId: roomId});
 
 			setTextMessage('');
-			setRoomId('');
 			setMessage([]);
 			setActiveChat(false);
 
@@ -51,35 +57,62 @@ function Chat(props) {
 
 		// Check if roomId is null then create new Room
 		if (!roomId) {
-			const newRoomData = await ChatRoomsAPI.createNewRoom();
-			setRoomId(newRoomData._id);
+			ChatRoomsAPI.createNewRoom()
+				.then(newRoomId => {
+					const data = {
+						message: textMessage,
+						roomId: newRoomId,
+						is_admin: false,
+					};
+			
+					//Tiếp theo nó sẽ postdata lên api đưa dữ liệu vào database
+					ChatRoomsAPI.addMessage(data);
+					setTextMessage('');
+					socket.emit('send_message', data);
+				})
+				.catch(err => console.log(err))
+		} else {
+			const data = {
+				message: textMessage,
+				roomId: roomId,
+				is_admin: false,
+			};
+	
+			//Tiếp theo nó sẽ postdata lên api đưa dữ liệu vào database
+			ChatRoomsAPI.addMessage(data);
+			setTextMessage('');
+			
+			setTimeout(() => {
+				socket.emit('send_message', data);
+			}, 200);
 		}
-		
-		const data = {
-			message: textMessage,
-			roomId: roomId,
-			is_admin: false,
-		};
-
-		//Tiếp theo nó sẽ postdata lên api đưa dữ liệu vào database
-		await ChatRoomsAPI.addMessage(data);
-		setTextMessage('');
-		
-		setTimeout(() => {
-			socket.emit('send_message', data);
-		}, 200);
+		setLoad(true)
 	};
 
 	const fetchData = async () => {
-		const response = await ChatRoomsAPI.getMessageByRoomId(roomId);
-		setMessage(response.content);
+		if(roomId) {
+			const response = await ChatRoomsAPI.getMessageByRoomId(roomId);
+			setMessage(response.messages);
+		}
 	};
+
+	useEffect(() => {
+		if (load) {
+			fetchData();
+			setLoad(false);
+		}
+	}, [load]);
+
+	useEffect(() => {
+		setLoad(true);
+	}, [roomId])
 
 	//Hàm này dùng để nhận socket từ server gửi lên
 	useEffect(() => {
 		//Nhận dữ liệu từ server gửi lên thông qua socket với key receive_message
-		socket.on('receive_message', (data) => {
+		socket.on('send_message', (data) => {
 			//Sau đó nó sẽ setLoad gọi lại hàm useEffect lấy lại dữ liệu
+			setLoad(true);
 		});
 	}, []);
 
@@ -123,8 +156,8 @@ function Chat(props) {
 								<h4 className='card-title'>
 									<strong>Customer Support</strong>
 								</h4>{' '}
-								<a className='btn btn-xs btn-secondary' href='#'>
-									Let's Chat App
+								<a className='btn btn-xs btn-secondary' href='#' onClick={endChat}>
+									Clear Chat App
 								</a>
 							</div>
 							<div className='ps-container ps-theme-default ps-active-y fix_scoll'>
@@ -133,7 +166,7 @@ function Chat(props) {
 										!value.is_admin ? (
 											<div
 												className='media media-chat media-chat-reverse'
-												key={value.id}>
+											>
 												<div className='media-body'>
 													<p>You: {value.message}</p>
 												</div>
@@ -141,15 +174,15 @@ function Chat(props) {
 										) : (
 											<div
 												className='media media-chat'
-												key={value.id}>
+											>
 												{' '}
 												<img
 													className='avatar'
 													src='https://img.icons8.com/color/36/000000/administrator-male.png'
 													alt='...'
 												/>
-												<div className='media-body' key={value.id}>
-													<p>Cộng tác viên: {value.message}</p>
+												<div className='media-body'>
+													<p>Counselor: {value.message}</p>
 												</div>
 											</div>
 										)

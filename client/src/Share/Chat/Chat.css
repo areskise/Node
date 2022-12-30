@@ -214,7 +214,7 @@ h4.card-title {
 	background-color: #f5f6f7;
 	border-radius: 3px;
 	font-weight: 100;
-	color: #9b9b9b;
+	color: #050505;
 }
 
 .media > * {
@@ -297,6 +297,7 @@ h4.card-title {
 	margin: 4px 0;
 	background-color: #f5f6f7;
 	border-radius: 3px;
+	max-width: 250px;
 }
 
 .border-light {

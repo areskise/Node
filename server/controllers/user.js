@@ -67,6 +67,7 @@ exports.postSignUp = async (req, res, next) => {
 exports.postLogOut = (req, res, next) => {
     res.clearCookie('access_token');
     res.clearCookie('user');
+    res.clearCookie('roomId');
     res.status(200).json('Logged out successfully')
 }
 

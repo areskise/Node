@@ -1,104 +1,186 @@
 import React from 'react';
-import {faChevronLeft, faChevronRight} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from '../../utils/axios';
 import './chat.css';
 
-const Users = ({login}) => {
-    const [users, setUsers] = useState([]);
-    const [page, setPage] = useState(1);
-    const [totalPage, setTotalPage] = useState(1);
-    const limit = 8;
+import io from 'socket.io-client';
+const socket = io('http://localhost:5000', { transports : ['websocket']});
+
+const Chats = ({login}) => {
+    const [textMessage, setTextMessage] = useState('');
+    const [search, setSearch] = useState('');
+    const [roomId, setRoomId] = useState();
+    const [chatrooms, setChatrooms] = useState([]);
+	const [message, setMessage] = useState([]);
+
+	const [load, setLoad] = useState(false);
 
     const navigate = useNavigate();
 
+    const onChangeSearch = (e) => {
+        setSearch(e.target.value);
+    };
+    const fetchRoom = () => {
+        axios.get(`/chatrooms?search=${search}`)
+                .then(res => {
+                    console.log(res.data);
+                    setChatrooms(res.data);
+                })
+                .catch(err => console.log(err))
+    }
+
     useEffect(() => {
         if(login) {
-            axios.get(`/users?limit=${limit}&page=${page}`)
-                .then(res => {
-                    setUsers(res.data.users)
-                    setTotalPage(Math.ceil(res.data.count/limit))
-                })
-                .catch(err => console.log(err));
+            fetchRoom();
         } else {
             navigate('/');
         }
-    }, [login, limit, page, navigate]);
+    }, [login, navigate, search]);
 
-    const nextPage = () => {
-        if(page < totalPage) {
-            setPage(page + 1)
-        } else {
-            setPage(1)
+    const onChangeText = (e) => {
+		setTextMessage(e.target.value);
+	};
+
+    const fetchMess = (roomId) => {
+        console.log(roomId);
+        if(roomId) {
+            axios.get(`/chatrooms/getById?roomId=${roomId}`)
+            .then(res => {
+                console.log(res);
+                    setRoomId(roomId);
+                    setMessage(res.data.messages);
+                })
+                .catch(err => console.log(err))
         }
     }
-    
-    const prevPage = () => {
-        if(page > 1) {
-            setPage(page - 1)
-        } else {
-            setPage(totalPage)
-        }
+
+	const handleClick = (roomId) => {
+        fetchMess(roomId);
     }
+
+    const handlerSend = () => {
+        const data = {
+			message: textMessage,
+			roomId: roomId,
+			is_admin: true,
+		};
+
+		axios.put('/chatrooms/addMessage', data);
+		setTextMessage('');
+		
+		setTimeout(() => {
+			socket.emit('send_message', data);
+		}, 200);
+		setLoad(true)
+    }
+
+    useEffect(() => {
+		if (load) {
+            fetchRoom();
+            fetchMess(roomId);
+			setLoad(false);
+		}
+	}, [load]);
+
+	useEffect(() => {
+		socket.on('send_message', (data) => {
+            console.log(data);
+			setLoad(true);
+		});
+	}, []);
 
     return (
         <div className="container">
-            <div className="user__container">
-                <div className='userInfo'>
-                    <div className="userInfo__board">
-                        <div className='userInfo__board-title'>
-                        <h2>Users List</h2>
+            <div className="chat__container">
+                <div className='chatInfo'>
+                    <div className="chatInfo__board">
+                        <div className='chatInfo__board-title'>
+                        <h2>Chat</h2>
                         </div>
-                        <div className="userInfo__board-table">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th><span></span>ID</th>
-                                        <th><span></span>Full Name</th>
-                                        <th><span></span>Email</th>
-                                        <th><span></span>Phone</th>
-                                        <th><span></span>Role</th>
-                                        </tr>
-                                </thead>
-                                <tbody>
-                                    {users.map((user, i) => (
-                                        <tr key={i}>
-                                            <td>{user._id}</td>
-                                            <td>{user.fullName}</td>
-                                            <td>{user.email}</td>
-                                            <td>{user.phone}</td>
-                                            <td>{user.role}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td>
-                                            {page} of {totalPage}
-                                            <span></span>
-                                            <button className='paging__button' onClick={() => prevPage()}>
-                                            <FontAwesomeIcon icon={faChevronLeft} />
-                                            </button>
-                                        
-                                            <button className='paging__button' onClick={() => nextPage()}>
-                                            <FontAwesomeIcon icon={faChevronRight} />
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </tfoot>
-                            </table>
+                        <div className="chatInfo__board-table">
+                            <div className="chatInfo__board-items">
+                                <div className="chatInfo__board-chatRoom">
+                                    <input 
+                                        type="text" 
+                                        className='text-message-input'
+                                        placeholder='Search Contact'
+                                        onChange={onChangeSearch}
+                                    />
+                                    <div className='room-content'>
+                                        {chatrooms && chatrooms.map(chatroom => (
+                                            <div className='room-id'>
+                                                <div className={roomId!==chatroom._id ? 'room-item' : 'room_active'} key={chatroom._id} onClick={() => handleClick(chatroom._id)}>
+                                                    <img
+                                                        className='avatar'
+                                                        src='https://img.icons8.com/color/36/000000/administrator-male.png'
+                                                        alt='...'
+                                                    />
+                                                    <p>{chatroom._id}</p>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                                <div className='chatInfo__board-message'>
+                                <div className='message-content'>
+								{message &&
+									message.map((value) =>
+										!value.is_admin ? (
+											<div
+												className='media media-chat '
+											>
+												<div className='media-body'>
+                                                    <img
+                                                        className='avatar'
+                                                        src='https://img.icons8.com/color/36/000000/administrator-male.png'
+                                                        alt='...'
+                                                    />
+													<p className='mess'>
+                                                        {value.message}
+                                                    </p>
+												</div>
+											</div>
+										) : (
+											<div
+												className='media media-chat media-chat-reverse'
+											>
+												{' '}
+												<div className='media-body'>
+													<p>{value.message}</p>
+												</div>
+											</div>
+										)
+									)}
+							</div>
+							<div className='publisher bt-1 border-light'>
+								<input
+									type='text'
+                                    className='text-message-input'
+									placeholder='Enter Message!'
+									onChange={onChangeText}
+									value={textMessage}
+									onKeyPress={(e) => {
+										if (e.key === 'Enter') {
+											handlerSend();
+										}
+									}}
+								/>
+								<a
+									onClick={handlerSend}
+									className='text-message-item'
+									data-abc='true'>
+									<i className='fa fa-paper-plane'></i>
+								</a>
+							</div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div> 
-        </div>
     )
 }
 
-export default Users
+export default Chats
