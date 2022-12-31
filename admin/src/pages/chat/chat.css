@@ -554,6 +554,7 @@ h4.card-title {
 	display: flex;
 	align-items: center;
 	background-color: #f9fafb;
+	width: 105%;
 }
 
 .publisher-input {
@@ -609,4 +610,8 @@ textarea {
 
 .text-info {
 	color: #48b0f7 !important;
+}
+
+.error {
+	color: red;
 }

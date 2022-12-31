@@ -1,8 +1,8 @@
 import axiosClient from './axiosClient';
 
 const ProductAPI = {
-	getAPI: () => {
-		const url = '/products';
+	getAPI: (query) => {
+		const url = `/products${query}`;
 		return axiosClient.get(url);
 	},
 

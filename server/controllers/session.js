@@ -1,6 +1,25 @@
 const Session = require('../models/session');
 const io = require('../socket');
 
+exports.getRoomByUser = (req, res, next) => {
+    const userId = req.query.userId;
+    Session.findOne({userId: userId})
+        .then(result => {
+            if(result) {
+                res.cookie('roomId', result._id, {
+                    maxAge: 86400000,
+                });
+                res.status(200).json(result)
+            }
+        })
+        .catch(err => {
+            if (!err.statusCode) {
+                err.statusCode = 500;
+            }
+            next(err);
+        });
+}
+
 exports.getMessageByRoomId = (req, res, next) => {
     const roomId = req.query.roomId;
     Session.findById(roomId)
@@ -25,7 +44,11 @@ exports.createNewRoom = (req, res, next) => {
         .then(result => {
             res.cookie('roomId', result._id, {
                 maxAge: 86400000,
-            })
+            });
+            io.getIO().emit('create_room', {
+                session: result,
+                roomId: result._id
+            });
             res.status(201).json(result._id);
         })
         .catch(err => {
@@ -41,6 +64,10 @@ exports.endRoom = (req, res, next) => {
     Session.findByIdAndDelete(roomId)
         .then(result => {
             res.clearCookie('roomId');
+            io.getIO().emit('end_room', {
+                session: result,
+                roomId: roomId
+            });
             res.status(201).json(result);
         })
         .catch(err => {
@@ -81,9 +108,11 @@ exports.addMessage = (req, res, next) => {
 
 exports.getRoomChat = (req, res, next) => {
     const search = req.query.search;
-
-    Session.find()
+    console.log(search);
+    if(search && search !=='') {
+    Session.find({_id: search})
         .then(result => {
+            console.log(result);
             res.status(200).json(result)
         })
         .catch(err => {
@@ -92,6 +121,19 @@ exports.getRoomChat = (req, res, next) => {
             }
             next(err);
         });
+    } else {
+        Session.find()
+        .then(result => {
+            console.log(result);
+            res.status(200).json(result)
+        })
+        .catch(err => {
+            if (!err.statusCode) {
+                err.statusCode = 500;
+            }
+            next(err);
+        });
+    }
 }
 
 exports.getMessage = (req, res, next) => {

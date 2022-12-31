@@ -1,7 +1,10 @@
 const Product = require('../models/product')
 
 exports.getAPI = (req, res, next) => {
-    Product.find()
+    const search = req.query.search;
+    const regex = new RegExp(search, 'i');
+
+    Product.find({name: regex})
         .then(products => {
             res.status(200).json(products)
         })
@@ -86,13 +89,15 @@ exports.getPagination = (req, res, next) => {
 }
 
 exports.adminProduct = async (req, res, next) => {
-    const {limit, page} = req.query;
+    const {limit, page, search} = req.query;
     const skip = (page - 1) * limit;
-
-    const count = await Product.find().then(products => {
-        return products.length
+    const regex = new RegExp(search, 'i');
+    console.log(search);
+    const count = await Product.find({name: regex})
+        .then(products => {
+            return products.length
     })
-        Product.find()
+        Product.find({name: regex})
             .limit(limit).skip(skip)
             .then(products => {
                 res.status(200).json({

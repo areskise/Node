@@ -82,6 +82,15 @@ li {
     margin-bottom: 10px;
 }
 
+.search-input {
+    display: flex;
+    outline: none;
+    width: 25%;
+    min-width: 256px;
+    height: 32px;
+    border: 1px solid #ccc;
+}
+
 table { 
     border: 1px solid lightgray;
     margin-top: 20px;

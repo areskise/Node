@@ -19,7 +19,6 @@ function Shop(props) {
 	//Tổng số trang
 	const [totalPage, setTotalPage] = useState();
 	const [length, setLength] = useState();
-
 	// Get category parram from url by localtion
 	const category = new URLSearchParams(window.location.search).get("category") || 'all';
 	console.log(category);
@@ -88,7 +87,15 @@ function Shop(props) {
 			// Nếu mà category === 'all' thì nó sẽ gọi hàm get tất cả sản phẩm
 			// Ngược lại thì nó sẽ gọi hàm pagination và phân loại sản phẩm
 			if (pagination.category === 'all') {
-				response = await ProductAPI.getAPI();
+				const params = {
+					search: pagination.search
+				};
+
+				const query = queryString.stringify(params);
+
+				const newQuery = '?' + query;
+
+				response = await ProductAPI.getAPI(newQuery);
 				console.log(response);
 			} else {
 				const params = {

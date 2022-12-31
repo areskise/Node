@@ -11,14 +11,19 @@ import './products.css';
 const Products = ({admin}) => {
     const [products, setProducts] = useState([]);
     const [page, setPage] = useState(1);
+    const [search, setSearch] = useState('');
     const [totalPage, setTotalPage] = useState(1);
     const limit = 8;
     
     const navigate = useNavigate();
 
+    const onChangeSearch = (e) => {
+        setSearch(e.target.value);
+    };
+
     useEffect(() => {
         if(admin) {
-            axios.get(`/admin/products?limit=${limit}&page=${page}`)
+            axios.get(`/admin/products?limit=${limit}&page=${page}&search=${search}`)
                 .then(res => {
                     setProducts(res.data.products)
                     setTotalPage(Math.ceil(res.data.count/limit))
@@ -27,7 +32,7 @@ const Products = ({admin}) => {
         } else {
             navigate('/');
         }
-    }, [admin, limit, page, navigate]);
+    }, [admin, limit, page, search, navigate]);
 
     const handleDelete = (id) => {
         const check = window.confirm('Are you sure delete this product?');
@@ -76,8 +81,14 @@ const Products = ({admin}) => {
             <div className="hotel__container">
                 <div className='hotelInfo'>
                     <div className="hotelInfo__board">
-                        <div className='hotelInfo__board-title'>
                         <h2>Products List</h2>
+                        <div className='hotelInfo__board-title'>
+                        <input 
+                            type="text" 
+                            className='search-input'
+                            placeholder='Search Product'
+                            onChange={onChangeSearch}
+                        />
                         <a href="/addProduct">Add New</a>
                         </div>
                         <div className="hotelInfo__board-table">

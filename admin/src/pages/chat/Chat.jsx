@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import alertify from 'alertifyjs';
 import axios from '../../utils/axios';
 import './chat.css';
 
@@ -15,6 +16,7 @@ const Chats = ({login}) => {
 	const [message, setMessage] = useState([]);
 
 	const [load, setLoad] = useState(false);
+	const [error, setError] = useState(false);
 
     const navigate = useNavigate();
 
@@ -22,12 +24,20 @@ const Chats = ({login}) => {
         setSearch(e.target.value);
     };
     const fetchRoom = () => {
+        console.log(search);
         axios.get(`/chatrooms?search=${search}`)
                 .then(res => {
                     console.log(res.data);
                     setChatrooms(res.data);
+                    setMessage([]);
+                    setRoomId();
+                    setError(false)
                 })
-                .catch(err => console.log(err))
+                .catch(err => {
+                    setError(true);
+                    setChatrooms([]);
+                    setMessage([]);
+                })
     }
 
     useEffect(() => {
@@ -52,6 +62,8 @@ const Chats = ({login}) => {
                     setMessage(res.data.messages);
                 })
                 .catch(err => console.log(err))
+        } else {
+            setMessage([]);
         }
     }
 
@@ -60,19 +72,24 @@ const Chats = ({login}) => {
     }
 
     const handlerSend = () => {
-        const data = {
-			message: textMessage,
-			roomId: roomId,
-			is_admin: true,
-		};
+        if(roomId) {
+            const data = {
+                message: textMessage,
+                roomId: roomId,
+                is_admin: true,
+            };
 
-		axios.put('/chatrooms/addMessage', data);
-		setTextMessage('');
-		
-		setTimeout(() => {
-			socket.emit('send_message', data);
-		}, 200);
-		setLoad(true)
+            axios.put('/chatrooms/addMessage', data);
+            setTextMessage('');
+            
+            setTimeout(() => {
+                socket.emit('send_message', data);
+            }, 200);
+            setLoad(true)
+        } else {
+            alertify.set('notifier', 'position', 'top-right');
+            alertify.error('Select a room chat!');
+        }
     }
 
     useEffect(() => {
@@ -84,8 +101,19 @@ const Chats = ({login}) => {
 	}, [load]);
 
 	useEffect(() => {
-		socket.on('send_message', (data) => {
+        socket.on('send_message', (data) => {
             console.log(data);
+            setLoad(true);
+        });
+		socket.on('create_room', (data) => {
+            console.log(data);
+			setLoad(true);
+		});
+        socket.on('end_room', (data) => {
+            console.log(data);
+            if(roomId===data.roomId) {
+                setMessage([]);
+            }
 			setLoad(true);
 		});
 	}, []);
@@ -104,7 +132,7 @@ const Chats = ({login}) => {
                                     <input 
                                         type="text" 
                                         className='text-message-input'
-                                        placeholder='Search Contact'
+                                        placeholder='Search By Room Id'
                                         onChange={onChangeSearch}
                                     />
                                     <div className='room-content'>
@@ -121,6 +149,7 @@ const Chats = ({login}) => {
                                             </div>
                                         ))}
                                     </div>
+                                    {error && <div className='error'>No room id match search</div>}
                                 </div>
                                 <div className='chatInfo__board-message'>
                                 <div className='message-content'>

@@ -19,7 +19,13 @@ function Chat(props) {
 	// Hàm này dùng để mở hộp thoại chat
 	const onChat = () => {
 		if(user) {
+			const userId = user._id;
 			setActiveChat(!activeChat);
+			ChatRoomsAPI.getRoomByUser(userId)
+				.then(res => {
+					setMessage(res.messages);
+				})
+				.catch(err => console.log(err));
 		} else {
 			window.location.replace('/signin')
 		}
